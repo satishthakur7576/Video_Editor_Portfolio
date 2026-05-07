@@ -5,7 +5,7 @@ import {
   Mail, Phone, MapPin, Linkedin, Github, Instagram,
   User, FileText, Briefcase, BookOpen, Send,
   Layout, Code, Smartphone, Camera,
-  Download, ExternalLink, ChevronRight, X, Sparkles
+  Download, ExternalLink, ChevronRight, X, Sparkles, GraduationCap
 } from 'lucide-react';
 import { Tab, Service, TimelineItem, Skill, Project, BlogPost } from './types';
 import { CursorGlow, Magnetic, SectionWrapper, Parallax, AnimatedBackground } from './components/Effects';
@@ -20,7 +20,8 @@ const PROJECTS: Project[] = [
     image: 'https://picsum.photos/seed/cad/800/600',
     description: 'Designed 3D part models and multi-component assemblies using SolidWorks, applying GD&T principles and generating production-ready engineering drawings with proper tolerances and annotations.',
     technologies: ['SolidWorks', '3D Modeling', 'GD&T', 'Assemblies'],
-    gallery: ['https://picsum.photos/seed/cad1/800/600', 'https://picsum.photos/seed/cad2/800/600']
+    gallery: ['https://picsum.photos/seed/cad1/800/600', 'https://picsum.photos/seed/cad2/800/600'],
+    link: 'https://github.com/satishthakur7576/Portfolio'
   },
   {
     id: '2d-drafting',
@@ -29,7 +30,8 @@ const PROJECTS: Project[] = [
     image: 'https://picsum.photos/seed/draft/800/600',
     description: 'Created detailed 2D mechanical drawings including cross-sections, exploded views, and bill of materials (BOM) for machine components using AutoCAD Mechanical.',
     technologies: ['AutoCAD Mechanical', '2D Drafting', 'BOM', 'Cross-sections'],
-    gallery: ['https://picsum.photos/seed/draft1/800/600', 'https://picsum.photos/seed/draft2/800/600']
+    gallery: ['https://picsum.photos/seed/draft1/800/600', 'https://picsum.photos/seed/draft2/800/600'],
+    link: 'https://github.com/satishthakur7576/Portfolio'
   },
   {
     id: 'python-automation',
@@ -38,7 +40,8 @@ const PROJECTS: Project[] = [
     image: 'https://picsum.photos/seed/python/800/600',
     description: 'Developed Python scripts for logical problem-solving and basic task automation, building a foundation for data-driven engineering workflows and process optimization.',
     technologies: ['Python', 'Scripting', 'Automation', 'Data Processing'],
-    gallery: ['https://picsum.photos/seed/python1/800/600', 'https://picsum.photos/seed/python2/800/600']
+    gallery: ['https://picsum.photos/seed/python1/800/600', 'https://picsum.photos/seed/python2/800/600'],
+    link: 'https://github.com/satishthakur7576/Portfolio'
   }
 ];
 
@@ -198,7 +201,10 @@ const ProjectModal = ({ projects }: { projects: Project[] }) => {
               </div>
 
               <Magnetic strength={0.2}>
-                <button className="w-full py-4 primary-gradient text-bg-dark font-bold rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-primary-start/20 active:scale-95">
+                <button 
+                  onClick={() => project.link && window.open(project.link, '_blank')}
+                  className="w-full py-4 primary-gradient text-bg-dark font-bold rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-primary-start/20 active:scale-95"
+                >
                   <ExternalLink size={18} />
                   Live Preview
                 </button>
@@ -255,7 +261,7 @@ const KineticText = ({ text, className }: { text: string, className?: string }) 
   );
 };
 
-const AboutSection = () => {
+const AboutSection = ({ setActiveTab }: { setActiveTab: (tab: Tab) => void }) => {
   return (
     <SectionWrapper>
       <div className="flex flex-col items-center text-center max-w-3xl mx-auto py-16">
@@ -305,14 +311,21 @@ const AboutSection = () => {
           className="flex flex-wrap justify-center gap-4 items-center"
         >
           <Magnetic strength={0.3}>
-            <button className="px-6 py-3 bg-primary-start text-bg-dark font-bold rounded-full hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all">
+            <button 
+              onClick={() => setActiveTab('Portfolio')}
+              className="px-6 py-3 bg-primary-start text-bg-dark font-bold rounded-full hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all"
+            >
               View My Work
             </button>
           </Magnetic>
           <Magnetic strength={0.3}>
-            <button className="px-6 py-3 border border-gray-600 text-white font-medium rounded-full hover:bg-white/5 transition-all">
+            <a 
+              href="/Satish_Thakur_CV.pdf" 
+              download
+              className="px-6 py-3 border border-gray-600 text-white font-medium rounded-full hover:bg-white/5 transition-all inline-block"
+            >
               Download CV
-            </button>
+            </a>
           </Magnetic>
         </motion.div>
       </div>
@@ -328,17 +341,50 @@ const ResumeSection = () => {
     { name: 'Vue', percentage: 95 },
   ];
 
+  const experience: TimelineItem[] = [
+    { title: "Junior Mechanical Engineer", period: "2024 - Present", description: "Led 3D CAD modeling projects and improved production processes using Python automation." },
+    { title: "Engineering Intern", period: "2023 - 2024", description: "Assisted in drafting 2D mechanical drawings and preparing BOMs." }
+  ];
+
+  const education: TimelineItem[] = [
+    { title: "B.Tech Mechanical Engineering", period: "2022 - 2026", description: "Focused on modern mechanical design, CAD modeling, and thermodynamics." }
+  ];
+
   return (
     <SectionWrapper>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center py-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start py-10">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
+          className="space-y-12"
         >
-          <div className="aspect-square rounded-[3rem] bg-border-dark flex items-center justify-center relative shadow-2xl border border-white/5 overflow-hidden group">
-             <img src="https://picsum.photos/seed/skills/800/800" alt="Skills" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-             <div className="absolute inset-0 bg-primary-start/10 mix-blend-overlay" />
+          <div>
+            <h2 className="text-3xl font-bold mb-8 flex items-center gap-3"><Briefcase className="text-primary-start" /> Experience</h2>
+            <div className="space-y-8 border-l-2 border-border-dark pl-6 ml-3 relative">
+              {experience.map((item, i) => (
+                <div key={i} className="relative">
+                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-primary-start shadow-[0_0_10px_rgba(0,229,255,0.8)]" />
+                  <h3 className="text-xl font-bold text-white mb-1">{item.title}</h3>
+                  <p className="text-primary-start text-sm mb-3 font-medium">{item.period}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div>
+            <h2 className="text-3xl font-bold mb-8 flex items-center gap-3"><GraduationCap className="text-primary-start" /> Education</h2>
+            <div className="space-y-8 border-l-2 border-border-dark pl-6 ml-3 relative">
+              {education.map((item, i) => (
+                <div key={i} className="relative">
+                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-primary-start shadow-[0_0_10px_rgba(0,229,255,0.8)]" />
+                  <h3 className="text-xl font-bold text-white mb-1">{item.title}</h3>
+                  <p className="text-primary-start text-sm mb-3 font-medium">{item.period}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">{item.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </motion.div>
 
@@ -498,21 +544,24 @@ const BlogSection = () => {
       category: 'Design',
       date: 'Feb 23, 2022',
       description: 'Veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
-      image: 'https://picsum.photos/seed/conf/600/400'
+      image: 'https://picsum.photos/seed/conf/600/400',
+      link: 'https://github.com/satishthakur7576'
     },
     {
       title: 'Best Fonts Every Designer',
       category: 'Design',
       date: 'Feb 23, 2022',
       description: 'Sed ut perspiciatis, nam libero tempore, cum soluta nobis est eligendi.',
-      image: 'https://picsum.photos/seed/fonts/600/400'
+      image: 'https://picsum.photos/seed/fonts/600/400',
+      link: 'https://github.com/satishthakur7576'
     },
     {
       title: 'Design Digest #80',
       category: 'Design',
       date: 'Feb 23, 2022',
       description: 'Excepteur sint occaecat cupidatat no proident, quis nostrum exercitationem ullam.',
-      image: 'https://picsum.photos/seed/digest/600/400'
+      image: 'https://picsum.photos/seed/digest/600/400',
+      link: 'https://github.com/satishthakur7576'
     },
   ];
 
@@ -537,6 +586,7 @@ const BlogSection = () => {
             transition={{ delay: i * 0.1 }}
             whileHover={{ y: -10 }}
             className="bg-bg-card border border-border-dark rounded-3xl overflow-hidden group cursor-pointer"
+            onClick={() => post.link && window.open(post.link, '_blank')}
           >
             <div className="aspect-video overflow-hidden">
               <img
@@ -698,7 +748,7 @@ export default function App() {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'About': return <AboutSection />;
+      case 'About': return <AboutSection setActiveTab={setActiveTab} />;
       case 'Resume': return <ResumeSection />;
       case 'Portfolio': return <PortfolioSection />;
       case 'Blog': return <BlogSection />;

@@ -27,6 +27,7 @@ export interface Project {
   description: string;
   technologies: string[];
   gallery: string[];
+  link?: string;
 }
 
 export interface BlogPost {
@@ -35,4 +36,5 @@ export interface BlogPost {
   date: string;
   description: string;
   image: string;
+  link?: string;
 }
