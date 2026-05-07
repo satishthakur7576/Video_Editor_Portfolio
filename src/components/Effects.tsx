@@ -1,18 +1,38 @@
 import { useState, useEffect, useRef, ReactNode, MouseEvent as ReactMouseEvent } from 'react';
 import { motion, useSpring, useMotionValue } from 'motion/react';
 
+export const AnimatedBackground = () => {
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-[-1] bg-bg-dark">
+      <div className="absolute top-[-10%] left-[-10%] mesh-blob-1" />
+      <div className="absolute top-[40%] right-[-10%] mesh-blob-2" />
+      <div className="absolute bottom-[-20%] left-[20%] mesh-blob-3" />
+      <div className="absolute inset-0 bg-noise mix-blend-overlay opacity-30" />
+    </div>
+  );
+};
+
 export const CursorGlow = () => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const [isHovering, setIsHovering] = useState(false);
 
-  const springConfig = { damping: 25, stiffness: 150 };
-  const x = useSpring(mouseX, springConfig);
-  const y = useSpring(mouseY, springConfig);
+  const springConfigGlow = { damping: 40, stiffness: 100 };
+  const springConfigDot = { damping: 25, stiffness: 300 };
+  
+  const glowX = useSpring(mouseX, springConfigGlow);
+  const glowY = useSpring(mouseY, springConfigGlow);
+  
+  const dotX = useSpring(mouseX, springConfigDot);
+  const dotY = useSpring(mouseY, springConfigDot);
 
   useEffect(() => {
     const handleMouseMove = (e: globalThis.MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
+      
+      const target = e.target as HTMLElement;
+      setIsHovering(window.getComputedStyle(target).cursor === 'pointer' || target.closest('button, a') !== null);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -20,15 +40,42 @@ export const CursorGlow = () => {
   }, [mouseX, mouseY]);
 
   return (
-    <motion.div 
-      className="cursor-glow"
-      style={{ 
-        translateX: x, 
-        translateY: y,
-        left: -300,
-        top: -300
-      }}
-    />
+    <>
+      <motion.div 
+        className="cursor-glow hidden md:block"
+        style={{ 
+          translateX: glowX, 
+          translateY: glowY,
+          left: -300,
+          top: -300
+        }}
+      />
+      <motion.div
+        className="fixed top-0 left-0 w-3 h-3 bg-primary-start rounded-full pointer-events-none z-[10000] mix-blend-screen hidden md:block"
+        style={{
+          translateX: dotX,
+          translateY: dotY,
+          left: -6,
+          top: -6,
+        }}
+        animate={{
+          scale: isHovering ? 2.5 : 1,
+          opacity: isHovering ? 0.3 : 1,
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      />
+      {isHovering && (
+        <motion.div
+          className="fixed top-0 left-0 w-1.5 h-1.5 bg-white rounded-full pointer-events-none z-[10001] hidden md:block"
+          style={{
+            translateX: dotX,
+            translateY: dotY,
+            left: -3,
+            top: -3,
+          }}
+        />
+      )}
+    </>
   );
 };
 

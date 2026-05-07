@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { HashRouter, Routes, Route, useNavigate, useParams, Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring, useMotionValue, useTransform } from 'motion/react';
 import {
   Mail, Phone, MapPin, Linkedin, Github, Instagram,
   User, FileText, Briefcase, BookOpen, Send,
@@ -8,7 +8,7 @@ import {
   Download, ExternalLink, ChevronRight, X, Sparkles
 } from 'lucide-react';
 import { Tab, Service, TimelineItem, Skill, Project, BlogPost } from './types';
-import { CursorGlow, Magnetic, SectionWrapper, Parallax } from './components/Effects';
+import { CursorGlow, Magnetic, SectionWrapper, Parallax, AnimatedBackground } from './components/Effects';
 
 // --- Constants ---
 
@@ -213,6 +213,48 @@ const ProjectModal = ({ projects }: { projects: Project[] }) => {
 
 // --- Sections ---
 
+const KineticText = ({ text, className }: { text: string, className?: string }) => {
+  const letters = Array.from(text);
+
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.04, delayChildren: 0.1 },
+    },
+  };
+
+  const child = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      transition: { type: "spring", damping: 12, stiffness: 200 },
+    },
+    hidden: {
+      opacity: 0,
+      y: 20,
+      filter: 'blur(4px)',
+      transition: { type: "spring", damping: 12, stiffness: 200 },
+    },
+  };
+
+  return (
+    <motion.span
+      className={`inline-flex ${className || ''}`}
+      variants={container}
+      initial="hidden"
+      animate="visible"
+    >
+      {letters.map((letter, index) => (
+        <motion.span variants={child} key={index}>
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </motion.span>
+  );
+};
+
 const AboutSection = () => {
   return (
     <SectionWrapper>
@@ -231,13 +273,10 @@ const AboutSection = () => {
           </div>
         </Parallax>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-5xl font-bold mb-4 text-white"
-        >
-          Hi, I'm <span className="text-primary-start">Satish Thakur</span>
-        </motion.h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white flex flex-wrap justify-center gap-x-2">
+          <KineticText text="Hi, I'm" />
+          <KineticText text="Satish Thakur" className="text-primary-start" />
+        </h1>
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -345,6 +384,48 @@ const ResumeSection = () => {
   );
 };
 
+const TiltCard = ({ children, className, onClick }: { children: React.ReactNode, className?: string, onClick?: () => void }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 20 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7deg", "-7deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 1000 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onClick={onClick}
+      className={className}
+    >
+      <div style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" }} className="h-full flex flex-col">
+        {children}
+      </div>
+    </motion.div>
+  );
+};
+
 const PortfolioSection = () => {
   const navigate = useNavigate();
 
@@ -369,10 +450,11 @@ const PortfolioSection = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.3 }}
-              whileHover={{ y: -10 }}
-              className="group cursor-pointer bg-[#141922] border border-white/5 rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)] transition-all flex flex-col hover:border-primary-start/30"
-              onClick={() => navigate(`/project/${project.id}`)}
             >
+              <TiltCard
+                className="group cursor-pointer bg-[#141922] border border-white/5 rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)] transition-all flex flex-col hover:border-primary-start/30 h-full"
+                onClick={() => navigate(`/project/${project.id}`)}
+              >
               <div className="relative aspect-[4/3] bg-border-dark overflow-hidden">
                 <img
                   src={project.image}
@@ -400,6 +482,7 @@ const PortfolioSection = () => {
                   )}
                 </div>
               </div>
+              </TiltCard>
             </motion.div>
           ))}
         </AnimatePresence>
@@ -606,6 +689,12 @@ const ContactSection = () => {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('About');
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   const renderContent = () => {
     switch (activeTab) {
@@ -619,11 +708,16 @@ export default function App() {
 
   return (
     <HashRouter>
+      <AnimatedBackground />
       <CursorGlow />
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-primary-start origin-left z-[9999]" 
+        style={{ scaleX }} 
+      />
       <div className="min-h-screen py-8 lg:py-16 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 items-center lg:items-start relative z-10">
         <IconSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        <main className="flex-1 w-full bg-bg-card/90 backdrop-blur-2xl border border-border-dark rounded-[2.5rem] flex flex-col min-h-[700px] relative shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden">
+        <main className="flex-1 w-full glass-panel rounded-[2.5rem] flex flex-col min-h-[700px] relative overflow-hidden">
           <div className="p-8 lg:p-16 flex-1">
             <AnimatePresence mode="wait">
               <div key={activeTab}>
@@ -632,16 +726,6 @@ export default function App() {
             </AnimatePresence>
           </div>
         </main>
-      </div>
-
-      {/* Background Decorative Elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-        <Parallax offset={-100}>
-          <div className="absolute top-[10%] left-[5%] w-96 h-96 bg-primary-start/5 rounded-full blur-[120px]" />
-        </Parallax>
-        <Parallax offset={150}>
-          <div className="absolute bottom-[10%] right-[5%] w-[500px] h-[500px] bg-primary-end/5 rounded-full blur-[150px]" />
-        </Parallax>
       </div>
 
       <AnimatePresence>

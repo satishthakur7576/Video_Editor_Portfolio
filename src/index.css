@@ -10,13 +10,13 @@
   --color-bg-dark: #141922;
   --color-bg-card: #1A1F2E;
   --color-border-dark: #2A3143;
+
+  --animate-blob: blob 15s infinite;
 }
 
 @layer base {
   body {
-    @apply text-gray-400 font-sans antialiased selection:bg-primary-start selection:text-bg-dark overflow-x-hidden min-h-screen;
-    background: linear-gradient(135deg, #74A6F0 0%, #8FBDF9 100%);
-    background-attachment: fixed;
+    @apply text-gray-400 font-sans antialiased selection:bg-primary-start selection:text-bg-dark overflow-x-hidden min-h-screen bg-bg-dark;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -26,15 +26,19 @@
 
 @layer utilities {
   .glass {
-    @apply bg-white/5 backdrop-blur-2xl border border-white/5;
+    @apply bg-white/5 backdrop-blur-3xl border border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)];
+  }
+  
+  .glass-panel {
+    @apply bg-[#141922]/80 backdrop-blur-3xl border border-white/5 shadow-2xl;
   }
 
   .primary-gradient {
-    @apply bg-linear-to-br from-primary-start to-primary-end;
+    @apply bg-gradient-to-br from-primary-start to-primary-end;
   }
 
   .primary-text {
-    @apply bg-linear-to-br from-primary-start to-primary-end bg-clip-text text-transparent;
+    @apply bg-gradient-to-br from-primary-start to-primary-end bg-clip-text text-transparent;
   }
 
   .no-scrollbar::-webkit-scrollbar {
@@ -45,16 +49,35 @@
     scrollbar-width: none;
   }
 
-  .animate-gradient-slow {
-    background-size: 200% 200%;
-    animation: gradient-move 15s ease infinite;
+  /* Animated Mesh Background Classes */
+  .mesh-blob-1 {
+    @apply absolute w-[800px] h-[800px] rounded-full mix-blend-screen filter blur-[100px] opacity-40 animate-blob;
+    background: radial-gradient(circle, rgba(0,229,255,0.4) 0%, transparent 70%);
+  }
+  .mesh-blob-2 {
+    @apply absolute w-[600px] h-[600px] rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-blob;
+    background: radial-gradient(circle, rgba(0,136,255,0.4) 0%, transparent 70%);
+    animation-delay: 2s;
+  }
+  .mesh-blob-3 {
+    @apply absolute w-[700px] h-[700px] rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-blob;
+    background: radial-gradient(circle, rgba(143,189,249,0.3) 0%, transparent 70%);
+    animation-delay: 4s;
   }
 }
 
-@keyframes gradient-move {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+/* Noise Texture Overlay */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
 }
 
 /* Custom Scrollbar */
