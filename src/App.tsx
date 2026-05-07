@@ -263,7 +263,7 @@ const AboutSection = () => {
           <div className="relative mb-8 group">
             <div className="w-32 h-32 rounded-full overflow-hidden border-[3px] border-primary-start/50 shadow-[0_0_30px_rgba(0,229,255,0.3)] bg-border-dark flex items-center justify-center">
               <img
-                src="https://picsum.photos/seed/richard/200/200"
+                src="/profile.jpg"
                 alt="Satish Thakur"
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
