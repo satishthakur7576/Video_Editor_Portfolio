@@ -1,744 +1,501 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { HashRouter, Routes, Route, useNavigate, useParams, Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence, useScroll, useSpring, useMotionValue, useTransform } from 'motion/react';
+import React, { useState } from 'react';
+import { motion, useScroll, useSpring } from 'motion/react';
 import {
-  Mail, Phone, MapPin, Linkedin, Github, Instagram,
-  User, FileText, Briefcase, BookOpen, Send,
-  Layout, Code, Smartphone, Camera,
-  Download, ExternalLink, ChevronRight, X, Sparkles, GraduationCap
+  Mail, Phone, Github, Instagram, Youtube, Twitter, Menu, X, ExternalLink, Code, Download, Send, Globe, Sun
 } from 'lucide-react';
-import { Tab, Service, TimelineItem, Skill, Project, BlogPost } from './types';
-import { CursorGlow, Magnetic, SectionWrapper, Parallax, AnimatedBackground } from './components/Effects';
+import { CursorGlow, Magnetic, SectionWrapper, AnimatedBackground } from './components/Effects';
 
-// --- Constants ---
+// Custom SVG Icons for Brands
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className} width="1em" height="1em">
+    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.61-5.46-.02-.24-.02-.48-.02-.72 0-.25.01-.5.02-.75.18-2.31 1.63-4.39 3.69-5.49 1.17-.63 2.53-.94 3.86-.88.02 1.4.01 2.8.01 4.2-.74-.08-1.5.09-2.12.51-.76.51-1.25 1.35-1.31 2.27-.05.9.36 1.78 1.05 2.37.76.65 1.83.84 2.81.56 1.02-.29 1.8-1.15 2.05-2.18.06-.24.08-.49.08-.74V.02z" />
+  </svg>
+);
 
-const PROJECTS: Project[] = [
+const LaravelIcon = () => (
+  <svg viewBox="0 0 24 24" fill="#FF2D20" className="w-5 h-5">
+    <path d="M22.6 10l-9.5-6c-1-.6-2.2-.6-3.2 0l-9.5 6C.1 10.2 0 10.6 0 11v8c0 .8.5 1.5 1.2 1.8l9.5 6c1 .6 2.2.6 3.2 0l9.5-6c.7-.4 1.2-1 1.2-1.8v-8c0-.4-.1-.8-.4-1zM12 23l-8.5-5.3V11.7L12 17.5l8.5-5.8v6L12 23zM12 16L3.5 10.2 12 4.9l8.5 5.3L12 16z" />
+  </svg>
+);
+
+const FramerMotionIcon = () => (
+  <svg viewBox="0 0 24 24" fill="#0055FF" className="w-5 h-5">
+    <path d="M4 0h16v8h-8zM4 8h8l8 8H4zM4 16h8v8z" />
+  </svg>
+);
+
+const VueIcon = () => (
+  <svg viewBox="0 0 24 24" fill="#4FC08D" className="w-5 h-5">
+    <path d="M14.28 1L12 4.95 9.72 1H2L12 18.29 22 1zM12 12L8.28 5.61H5.45L12 16.91l6.55-11.3h-2.83z" />
+  </svg>
+);
+
+const ReactIcon = () => (
+  <svg viewBox="0 0 24 24" fill="#61DAFB" className="w-5 h-5">
+    <path d="M11.95 18c-5.71 0-10.42-2.13-10.42-4.75S6.24 8.5 11.95 8.5s10.42 2.13 10.42 4.75S17.66 18 11.95 18zm0-8.5c-4.94 0-8.92 1.68-8.92 3.75s3.98 3.75 8.92 3.75 8.92-1.68 8.92-3.75-3.98-3.75-8.92-3.75z" />
+    <path d="M12.05 18.08c-2.85 2.47-5.18 5.6-5.18 8.67s1.42 4.25 3.17 4.25c1.75 0 4.09-1.18 5.18-8.67s-1.42-4.25-3.17-4.25zm-2.02 11.8c-.89 0-1.67-.6-1.67-2.75 0-2.31 1.76-4.92 4.03-7.1.58 4.29-1.47 9.85-2.36 9.85z" />
+    <path d="M11.95 5.92C9.1 3.45 6.77.32 6.77-2.75s1.42-4.25 3.17-4.25c1.75 0 4.09 1.18 5.18 8.67S13.7 5.92 11.95 5.92zM9.93-5.88c-.89 0-1.67.6-1.67 2.75 0 2.31 1.76 4.92 4.03 7.1.58-4.29-1.47-9.85-2.36-9.85z" />
+    <circle cx="12" cy="13.25" r="2.25" />
+  </svg>
+);
+
+const TailwindIcon = () => (
+  <svg viewBox="0 0 24 24" fill="#38BDF8" className="w-5 h-5">
+    <path d="M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z" />
+  </svg>
+);
+
+const FirebaseIcon = () => (
+  <svg viewBox="0 0 24 24" fill="#FFCA28" className="w-5 h-5">
+    <path d="M3.89 15.67l3.22-10.2c.2-.64 1.11-.64 1.32 0l1.43 4.54L3.89 15.67z" fill="#FFA000" />
+    <path d="M12.43 8.16L10.36 4.1c-.26-.49-.97-.49-1.23 0l-1.07 2.06 4.37 2z" fill="#F57C00" />
+    <path d="M3.89 15.67l7.56 14.15c.29.54 1.07.54 1.36 0l8.3-15.53-17.22 1.38z" fill="#FFCA28" />
+    <path d="M21.11 14.29l-6.8-12.7c-.25-.48-.96-.48-1.22 0l-3.23 6.04 11.25 6.66z" fill="#FFA000" />
+  </svg>
+);
+
+const PythonIcon = () => (
+  <svg viewBox="0 0 24 24" fill="#3776AB" className="w-5 h-5">
+    <path d="M11.95 1.54C5.64 1.54 5.64 4.36 5.64 4.36l.03 2.94h6.35v.42H4.45s-3.03-.13-3.03 4.37c0 4.5 2.65 4.35 2.65 4.35h1.86v-3.08s-.05-3.5 3.44-3.5h5.36s3.16.03 3.16-3.15V4.68s.16-3.14-5.94-3.14zm-1.69 1.95a.94.94 0 1 1 0 1.88.94.94 0 0 1 0-1.88z" fill="#387EB8"/>
+    <path d="M12.18 22.46c6.31 0 6.31-2.82 6.31-2.82l-.03-2.94h-6.35v-.42h7.57s3.03.13 3.03-4.37c0-4.5-2.65-4.35-2.65-4.35h-1.86v3.08s.05 3.5-3.44 3.5H9.4s-3.16-.03-3.16 3.15v2.03s-.16 3.14 5.94 3.14zm1.69-1.95a.94.94 0 1 1 0-1.88.94.94 0 0 1 0 1.88z" fill="#FFE873"/>
+  </svg>
+);
+
+const ViteIcon = () => (
+  <svg viewBox="0 0 24 24" fill="#646CFF" className="w-5 h-5">
+    <path d="M23.16 3.1L21.32.83l-8.9 22.42h-1.12L2.57.83l-1.81 2.27L11.75 24l11.41-20.9zm-2.02.43l-9.35 17.5-9.28-17.5 1.4-1.74 7.88 15.17L19.73 1.8z" />
+  </svg>
+);
+
+
+// --- Data ---
+const SKILLS = [
+  { name: 'laravel', percentage: 95, icon: <LaravelIcon /> },
+  { name: 'framer_motion', percentage: 80, icon: <FramerMotionIcon /> },
+  { name: 'vue', percentage: 88, icon: <VueIcon /> },
+  { name: 'React', percentage: 89, icon: <ReactIcon /> },
+  { name: 'Tailwind CSS', percentage: 92, icon: <TailwindIcon /> },
+  { name: 'firebase.js', percentage: 85, icon: <FirebaseIcon /> },
+  { name: 'Python', percentage: 77, icon: <PythonIcon /> },
+  { name: 'vite', percentage: 90, icon: <ViteIcon /> },
+];
+
+const PROJECTS = [
   {
-    id: 'cad-modeling',
-    title: '3D CAD Modeling \u2013 Mechanical Components',
-    category: '3D CAD Modeling',
-    image: 'https://picsum.photos/seed/cad/800/600',
-    description: 'Designed 3D part models and multi-component assemblies using SolidWorks, applying GD&T principles and generating production-ready engineering drawings with proper tolerances and annotations.',
-    technologies: ['SolidWorks', '3D Modeling', 'GD&T', 'Assemblies'],
-    gallery: ['https://picsum.photos/seed/cad1/800/600', 'https://picsum.photos/seed/cad2/800/600'],
-    link: 'https://github.com/satishthakur7576/Portfolio'
+    id: 1,
+    title: 'E-Commerce Platform',
+    image: 'https://picsum.photos/seed/ecom/600/400',
+    tags: ['React', 'Node.js', 'MongoDB'],
+    description: 'Full-featured e-commerce platform with payment gateway integration.'
   },
   {
-    id: '2d-drafting',
-    title: '2D Engineering Drafting',
-    category: '2D Drafting',
-    image: 'https://picsum.photos/seed/draft/800/600',
-    description: 'Created detailed 2D mechanical drawings including cross-sections, exploded views, and bill of materials (BOM) for machine components using AutoCAD Mechanical.',
-    technologies: ['AutoCAD Mechanical', '2D Drafting', 'BOM', 'Cross-sections'],
-    gallery: ['https://picsum.photos/seed/draft1/800/600', 'https://picsum.photos/seed/draft2/800/600'],
-    link: 'https://github.com/satishthakur7576/Portfolio'
+    id: 2,
+    title: 'Fitness Tracker App',
+    image: 'https://picsum.photos/seed/fit/600/400',
+    tags: ['React Native', 'Firebase'],
+    description: 'Mobile fitness app with workout plans and progress tracking.'
   },
   {
-    id: 'python-automation',
-    title: 'Python Automation Scripts',
-    category: 'Automation Scripts',
-    image: 'https://picsum.photos/seed/python/800/600',
-    description: 'Developed Python scripts for logical problem-solving and basic task automation, building a foundation for data-driven engineering workflows and process optimization.',
-    technologies: ['Python', 'Scripting', 'Automation', 'Data Processing'],
-    gallery: ['https://picsum.photos/seed/python1/800/600', 'https://picsum.photos/seed/python2/800/600'],
-    link: 'https://github.com/satishthakur7576/Portfolio'
+    id: 3,
+    title: 'AI Content Generator',
+    image: 'https://picsum.photos/seed/ai/600/400',
+    tags: ['Python', 'OpenAI', 'React'],
+    description: 'AI-powered content generation tool for marketers and bloggers.'
+  },
+  {
+    id: 4,
+    title: 'Crypto Dashboard',
+    image: 'https://picsum.photos/seed/crypto/600/400',
+    tags: ['Vue.js', 'Chart.js', 'API'],
+    description: 'Real-time crypto tracking dashboard with interactive charts.'
+  },
+  {
+    id: 5,
+    title: 'Task Management',
+    image: 'https://picsum.photos/seed/task/600/400',
+    tags: ['Laravel', 'Vue.js', 'MySQL'],
+    description: 'Collaborative task management system for remote teams.'
+  },
+  {
+    id: 6,
+    title: 'Real Estate Platform',
+    image: 'https://picsum.photos/seed/real/600/400',
+    tags: ['React', 'Tailwind', 'Firebase'],
+    description: 'Virtual real estate platform with 3D property tours.'
   }
 ];
 
 // --- Components ---
 
-const Typewriter = ({ texts, speed = 50, delayBetween = 2000 }: { texts: string[]; speed?: number; delayBetween?: number }) => {
-  const [textIndex, setTextIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-  const tick = useCallback(() => {
-    const fullText = texts[textIndex];
-    const updatedText = isDeleting
-      ? fullText.substring(0, displayedText.length - 1)
-      : fullText.substring(0, displayedText.length + 1);
-
-    setDisplayedText(updatedText);
-
-    if (!isDeleting && updatedText === fullText) {
-      setTimeout(() => setIsDeleting(true), delayBetween);
-    } else if (isDeleting && updatedText === '') {
-      setIsDeleting(false);
-      setTextIndex((prev) => (prev + 1) % texts.length);
-    }
-  }, [displayedText, isDeleting, textIndex, texts, delayBetween]);
-
-  useEffect(() => {
-    const timer = setTimeout(tick, isDeleting ? speed / 2 : speed);
-    return () => clearTimeout(timer);
-  }, [tick, isDeleting, speed]);
-
-  return (
-    <span className="primary-text font-bold">
-      {displayedText}
-      <motion.span
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-        className="inline-block w-1 h-5 ml-1 bg-primary-start align-middle"
-      />
-    </span>
-  );
-};
-
-const IconSidebar = ({ activeTab, setActiveTab }: { activeTab: Tab, setActiveTab: (t: Tab) => void }) => {
-  const tabs: { name: Tab, icon: React.ReactNode }[] = [
-    { name: 'About', icon: <User size={20} /> },
-    { name: 'Resume', icon: <FileText size={20} /> },
-    { name: 'Portfolio', icon: <Briefcase size={20} /> },
-    { name: 'Blog', icon: <BookOpen size={20} /> },
-    { name: 'Contact', icon: <Mail size={20} /> },
+  const navLinks = [
+    { name: 'Home', href: '#home' },
+    { name: 'About', href: '#about' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Skills', href: '#skills' },
+    { name: 'Contact', href: '#contact' },
   ];
-  const navigate = useNavigate();
-
-  const handleTabClick = (tab: Tab) => {
-    setActiveTab(tab.name);
-    navigate('/');
-  };
-
-  const location = useLocation();
-  const isProjectModal = location.pathname.startsWith('/project/');
 
   return (
-    <aside className={`w-full lg:w-20 bg-bg-card/80 backdrop-blur-2xl border border-border-dark rounded-[2rem] py-6 px-4 flex lg:flex-col items-center justify-center gap-6 shadow-[0_20px_40px_rgba(0,0,0,0.4)] h-fit lg:sticky lg:top-[50vh] lg:-translate-y-1/2 z-40 transition-opacity duration-300 ${isProjectModal ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-      {tabs.map((tab) => {
-        const isActive = activeTab === tab.name;
-        return (
-          <button
-            key={tab.name}
-            onClick={() => handleTabClick(tab)}
-            className={`relative p-3 rounded-xl transition-all duration-300 group ${isActive ? 'bg-primary-start/10 text-primary-start shadow-[0_0_15px_rgba(0,229,255,0.2)]' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
-            title={tab.name}
-          >
-            {tab.icon}
-            {isActive && (
-              <motion.div
-                layoutId="activeTabIndicator"
-                className="absolute inset-0 border border-primary-start/30 rounded-xl pointer-events-none"
-              />
-            )}
-          </button>
-        );
-      })}
-    </aside>
-  );
-};
+    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50">
+      <div className="bg-[#1A1F2E]/80 backdrop-blur-md border border-white/5 rounded-full px-6 py-3 flex items-center justify-between shadow-2xl">
+        <a href="#home" className="text-xl font-bold text-white flex items-center gap-1">
+          Portfolio<span className="text-primary-start">.</span>
+        </a>
 
-const ProjectModal = ({ projects }: { projects: Project[] }) => {
-  const { projectId } = useParams();
-  const navigate = useNavigate();
-  const project = projects.find(p => p.id === projectId);
-
-  if (!project) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-black/90 backdrop-blur-md"
-      onClick={() => navigate('/')}
-    >
-      <button
-        onClick={() => navigate('/')}
-        className="fixed top-6 right-6 w-12 h-12 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-xl flex items-center justify-center text-white transition-all z-[110] border border-white/10 shadow-2xl group hover:scale-110 active:scale-95"
-      >
-        <X size={24} className="group-hover:rotate-90 transition-transform duration-300" />
-      </button>
-
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.9, opacity: 0, y: 20 }}
-        className="bg-bg-card border border-border-dark w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl relative"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="p-8 sm:p-12">
-          <div className="aspect-video rounded-[2rem] overflow-hidden mb-10 bg-border-dark shadow-2xl border border-white/5 relative group">
-            <img src={project.image} alt={project.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
-            <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent pointer-events-none" />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2 space-y-6">
-              <h2 className="text-3xl font-bold">{project.title}</h2>
-              <p className="text-gray-400 leading-relaxed">{project.description}</p>
-
-              <div className="space-y-6">
-                <h3 className="text-xl font-bold flex items-center gap-3">
-                  <Sparkles size={20} className="text-primary-start" />
-                  Project Gallery
-                </h3>
-                <div className="grid grid-cols-2 gap-6">
-                  {project.gallery.map((img, i) => (
-                    <div key={i} className="aspect-video rounded-2xl overflow-hidden bg-border-dark border border-white/5 shadow-xl group cursor-zoom-in">
-                      <img src={img} alt={`${project.title} ${i}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" referrerPolicy="no-referrer" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-8">
-              <div>
-                <h4 className="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-4">Category</h4>
-                <p className="text-primary-start font-medium">{project.category}</p>
-              </div>
-
-              <div>
-                <h4 className="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-4">Technologies</h4>
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech, i) => (
-                    <span key={i} className="px-4 py-2 bg-border-dark/50 border border-white/5 rounded-xl text-xs font-medium text-gray-300 hover:text-primary-start hover:border-primary-start/30 transition-all cursor-default">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <Magnetic strength={0.2}>
-                <button 
-                  onClick={() => project.link && window.open(project.link, '_blank')}
-                  className="w-full py-4 primary-gradient text-bg-dark font-bold rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-primary-start/20 active:scale-95"
-                >
-                  <ExternalLink size={18} />
-                  Live Preview
-                </button>
-              </Magnetic>
-            </div>
-          </div>
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <a key={link.name} href={link.href} className="text-sm text-gray-300 hover:text-white transition-colors">
+              {link.name}
+            </a>
+          ))}
         </div>
-      </motion.div>
-    </motion.div>
+
+        <div className="hidden md:flex items-center gap-4">
+          <button className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <Sun size={18} className="text-gray-300" />
+          </button>
+          <button className="px-6 py-2 bg-primary-start text-bg-dark font-bold rounded-full hover:brightness-110 transition-all text-sm">
+            Hire Me
+          </button>
+        </div>
+
+        {/* Mobile Toggle */}
+        <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Nav */}
+      {isOpen && (
+        <div className="absolute top-20 left-0 w-full bg-[#1A1F2E] border border-white/5 rounded-2xl p-4 flex flex-col gap-4 shadow-2xl md:hidden">
+          {navLinks.map((link) => (
+            <a 
+              key={link.name} 
+              href={link.href} 
+              className="text-gray-300 hover:text-white p-2 rounded-lg hover:bg-white/5"
+              onClick={() => setIsOpen(false)}
+            >
+              {link.name}
+            </a>
+          ))}
+          <button className="px-6 py-3 bg-primary-start text-bg-dark font-bold rounded-xl w-full text-center">
+            Hire Me
+          </button>
+        </div>
+      )}
+    </nav>
   );
 };
 
-// --- Sections ---
+const SocialLinks = () => (
+  <div className="flex items-center gap-4 mb-8">
+    <a href="#" className="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 flex items-center justify-center text-white hover:scale-110 transition-transform">
+      <Instagram size={20} />
+    </a>
+    <a href="#" className="w-10 h-10 rounded-xl bg-black flex items-center justify-center text-white hover:scale-110 transition-transform border border-white/10">
+      <TikTokIcon className="w-5 h-5" />
+    </a>
+    <a href="#" className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-white hover:scale-110 transition-transform border border-white/10">
+      <Github size={20} />
+    </a>
+    <a href="#" className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center text-white hover:scale-110 transition-transform">
+      <Youtube size={20} />
+    </a>
+  </div>
+);
 
-const KineticText = ({ text, className }: { text: string, className?: string }) => {
-  const letters = Array.from(text);
-
-  const container = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.04, delayChildren: 0.1 },
-    },
-  };
-
-  const child = {
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: { type: "spring", damping: 12, stiffness: 200 },
-    },
-    hidden: {
-      opacity: 0,
-      y: 20,
-      filter: 'blur(4px)',
-      transition: { type: "spring", damping: 12, stiffness: 200 },
-    },
-  };
-
+const HeroSection = () => {
   return (
-    <motion.span
-      className={`inline-flex ${className || ''}`}
-      variants={container}
-      initial="hidden"
-      animate="visible"
-    >
-      {letters.map((letter, index) => (
-        <motion.span variants={child} key={index}>
-          {letter === " " ? "\u00A0" : letter}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
-};
-
-const AboutSection = ({ setActiveTab }: { setActiveTab: (tab: Tab) => void }) => {
-  return (
-    <SectionWrapper>
-      <div className="flex flex-col items-center text-center max-w-3xl mx-auto py-16">
-        <Parallax offset={20}>
-          <div className="relative mb-8 group">
-            <div className="w-32 h-32 rounded-full overflow-hidden border-[3px] border-primary-start/50 shadow-[0_0_30px_rgba(0,229,255,0.3)] bg-border-dark flex items-center justify-center">
-              <img
-                src="/profile.jpg"
-                alt="Satish Thakur"
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="absolute inset-0 bg-primary-start/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-full pointer-events-none" />
-          </div>
-        </Parallax>
-
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white flex flex-wrap justify-center gap-x-2">
-          <KineticText text="Hi, I'm" />
-          <KineticText text="Satish Thakur" className="text-primary-start" />
-        </h1>
-
+    <section id="home" className="min-h-screen pt-32 pb-16 flex items-center">
+      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-lg md:text-xl font-light text-gray-300 mb-8 flex items-center justify-center gap-2"
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
         >
-          I'm a <Typewriter texts={['Mechanical Engineer', 'CAD Designer', 'Python Developer']} />
+          <SocialLinks />
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            Hi, I'm Satish Thakur
+          </h1>
+          <p className="text-gray-400 text-lg mb-10 max-w-lg leading-relaxed">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum ut aperiam quia dignissimos corrupti, hic fugit, eveniet reprehenderit possimus voluptatum tenetur provident consequuntur!
+          </p>
+          <div className="flex flex-wrap items-center gap-4">
+            <Magnetic strength={0.2}>
+              <a href="#" className="px-8 py-4 bg-primary-start text-bg-dark font-bold rounded-full hover:brightness-110 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(249,115,22,0.3)]">
+                <Download size={20} />
+                Download CV
+              </a>
+            </Magnetic>
+            <Magnetic strength={0.2}>
+              <a href="#contact" className="px-8 py-4 bg-transparent border border-gray-600 text-white font-bold rounded-full hover:bg-white/5 transition-all flex items-center gap-2">
+                <Mail size={20} />
+                Contact Me
+              </a>
+            </Magnetic>
+          </div>
         </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-sm md:text-base text-gray-400 leading-relaxed mb-10 max-w-2xl px-4"
-        >
-          Final-year B.Tech Mechanical Engineering student with hands-on CAD experience in SolidWorks and AutoCAD. 
-          I create detailed 3D models, responsive mechanical designs, and use Python for automation.
-          Passionate about clean engineering and optimized workflows.
-        </motion.p>
-
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="flex flex-wrap justify-center gap-4 items-center"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="relative flex justify-center lg:justify-end"
         >
-          <Magnetic strength={0.3}>
-            <button 
-              onClick={() => setActiveTab('Portfolio')}
-              className="px-6 py-3 bg-primary-start text-bg-dark font-bold rounded-full hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all"
-            >
-              View My Work
-            </button>
-          </Magnetic>
-          <Magnetic strength={0.3}>
-            <a 
-              href="/Satish_Thakur_CV.pdf" 
-              download
-              className="px-6 py-3 border border-gray-600 text-white font-medium rounded-full hover:bg-white/5 transition-all inline-block"
-            >
-              Download CV
-            </a>
-          </Magnetic>
+          <div className="w-full max-w-[500px] aspect-square relative drop-shadow-2xl">
+            <img src="/hero_avatar.png" alt="Hero Avatar" className="w-full h-full object-contain" />
+          </div>
         </motion.div>
       </div>
-    </SectionWrapper>
+    </section>
   );
 };
 
-const ResumeSection = () => {
-  const skills: Skill[] = [
-    { name: 'React', percentage: 90 },
-    { name: 'Tailwind', percentage: 85 },
-    { name: 'Python', percentage: 80 },
-    { name: 'Vue', percentage: 95 },
-  ];
-
-  const experience: TimelineItem[] = [
-    { title: "Junior Mechanical Engineer", period: "2024 - Present", description: "Led 3D CAD modeling projects and improved production processes using Python automation." },
-    { title: "Engineering Intern", period: "2023 - 2024", description: "Assisted in drafting 2D mechanical drawings and preparing BOMs." }
-  ];
-
-  const education: TimelineItem[] = [
-    { title: "B.Tech Mechanical Engineering", period: "2022 - 2026", description: "Focused on modern mechanical design, CAD modeling, and thermodynamics." }
-  ];
-
+const AboutSection = () => {
   return (
-    <SectionWrapper>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start py-10">
+    <section id="about" className="py-20">
+      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="space-y-12"
+          transition={{ duration: 0.5 }}
+          className="order-2 lg:order-1 relative"
         >
-          <div>
-            <h2 className="text-3xl font-bold mb-8 flex items-center gap-3"><Briefcase className="text-primary-start" /> Experience</h2>
-            <div className="space-y-8 border-l-2 border-border-dark pl-6 ml-3 relative">
-              {experience.map((item, i) => (
-                <div key={i} className="relative">
-                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-primary-start shadow-[0_0_10px_rgba(0,229,255,0.8)]" />
-                  <h3 className="text-xl font-bold text-white mb-1">{item.title}</h3>
-                  <p className="text-primary-start text-sm mb-3 font-medium">{item.period}</p>
-                  <p className="text-gray-400 text-sm leading-relaxed">{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div>
-            <h2 className="text-3xl font-bold mb-8 flex items-center gap-3"><GraduationCap className="text-primary-start" /> Education</h2>
-            <div className="space-y-8 border-l-2 border-border-dark pl-6 ml-3 relative">
-              {education.map((item, i) => (
-                <div key={i} className="relative">
-                  <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-primary-start shadow-[0_0_10px_rgba(0,229,255,0.8)]" />
-                  <h3 className="text-xl font-bold text-white mb-1">{item.title}</h3>
-                  <p className="text-primary-start text-sm mb-3 font-medium">{item.period}</p>
-                  <p className="text-gray-400 text-sm leading-relaxed">{item.description}</p>
-                </div>
-              ))}
-            </div>
+           <div className="w-full max-w-[500px] mx-auto aspect-square relative drop-shadow-2xl">
+            <img src="/about_avatar.png" alt="About Avatar" className="w-full h-full object-contain" />
           </div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="order-1 lg:order-2"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-            My Skills
-          </h2>
-          <p className="text-sm md:text-base text-gray-400 leading-relaxed mb-12">
-            I'm a passionate web developer with over 3 years of experience creating modern, responsive web applications. I specialize in frontend development using cutting-edge technologies to deliver exceptional user experiences.
+          <h2 className="text-4xl font-bold text-white mb-6">About Me</h2>
+          <p className="text-gray-400 mb-8 leading-relaxed">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore suscipit expedita blanditiis temporibus nostrum nulla fugit consequuntur! Ullam earum perspiciatis sit ea, asperiores dolorum illum temporibus quidem? Iusto, officia mollita!
           </p>
 
-          <div className="space-y-8">
-            {skills.map((skill, i) => (
-              <div key={i} className="group">
-                <div className="flex justify-between mb-3">
-                  <span className="text-sm font-bold text-gray-300 flex items-center gap-3">
-                    <Code size={16} className="text-primary-start" />
-                    {skill.name}
-                  </span>
-                  <span className="text-sm text-primary-start font-medium">{skill.percentage}%</span>
+          <div className="grid grid-cols-3 gap-6 mb-10 text-center lg:text-left">
+            <div>
+              <h3 className="text-3xl font-bold text-primary-start mb-1">5+</h3>
+              <p className="text-sm text-gray-500 uppercase tracking-wider">Education</p>
+            </div>
+            <div>
+              <h3 className="text-3xl font-bold text-primary-start mb-1">10+</h3>
+              <p className="text-sm text-gray-500 uppercase tracking-wider">Years Experience</p>
+            </div>
+            <div>
+              <h3 className="text-3xl font-bold text-primary-start mb-1">100+</h3>
+              <p className="text-sm text-gray-500 uppercase tracking-wider">Projects Completed</p>
+            </div>
+          </div>
+
+          <button className="px-8 py-3 border border-gray-600 text-white font-bold rounded-full hover:bg-white/5 transition-all">
+            Learn More
+          </button>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+const SkillsSection = () => {
+  return (
+    <section id="skills" className="py-20">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">My Skills</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Technologies and tools I work with to create amazing web experiences.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {SKILLS.map((skill, i) => (
+            <motion.div
+              key={skill.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="bg-[#1A1F2E] border border-white/5 rounded-2xl p-6 hover:border-primary-start/30 transition-all group"
+            >
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-black/30 flex items-center justify-center border border-white/5">
+                  {skill.icon}
                 </div>
-                <div className="h-1.5 bg-bg-dark rounded-full overflow-hidden shadow-inner">
+                <h3 className="text-white font-medium">{skill.name}</h3>
+              </div>
+              
+              <div>
+                <div className="flex justify-between text-xs mb-2">
+                  <span className="text-gray-500">Proficiency</span>
+                  <span className="text-primary-start font-bold">{skill.percentage}%</span>
+                </div>
+                <div className="h-1.5 bg-black/40 rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: `${skill.percentage}%` }}
                     viewport={{ once: true }}
-                    transition={{ duration: 1.5, delay: i * 0.1, ease: [0.23, 1, 0.32, 1] }}
-                    className="h-full bg-primary-start shadow-[0_0_15px_rgba(0,229,255,0.8)] rounded-full relative"
-                  >
-                    <div className="absolute top-0 right-0 bottom-0 w-20 bg-gradient-to-r from-transparent to-white/40" />
-                  </motion.div>
+                    transition={{ duration: 1, delay: 0.5 }}
+                    className="h-full bg-primary-start rounded-full shadow-[0_0_10px_rgba(249,115,22,0.5)]"
+                  />
                 </div>
               </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </SectionWrapper>
-  );
-};
-
-const TiltCard = ({ children, className, onClick }: { children: React.ReactNode, className?: string, onClick?: () => void }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 20 });
-  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 20 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7deg", "-7deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <motion.div
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 1000 }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onClick={onClick}
-      className={className}
-    >
-      <div style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" }} className="h-full flex flex-col">
-        {children}
-      </div>
-    </motion.div>
-  );
-};
-
-const PortfolioSection = () => {
-  const navigate = useNavigate();
-
-  return (
-    <SectionWrapper>
-      <div className="flex flex-col items-center mb-16 text-center">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-          My Portfolio
-        </h2>
-        <p className="text-sm md:text-base text-gray-400">
-          A collection of my recent projects
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <AnimatePresence mode="popLayout">
-          {PROJECTS.map((project, i) => (
-            <motion.div
-              layout
-              key={project.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.3 }}
-            >
-              <TiltCard
-                className="group cursor-pointer bg-[#141922] border border-white/5 rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)] transition-all flex flex-col hover:border-primary-start/30 h-full"
-                onClick={() => navigate(`/project/${project.id}`)}
-              >
-              <div className="relative aspect-[4/3] bg-border-dark overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-primary-start/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-overlay pointer-events-none" />
-              </div>
-              
-              <div className="p-6 flex-1 flex flex-col bg-[#1A1F2E]">
-                <h4 className="text-base font-bold mb-2 text-white group-hover:text-primary-start transition-colors line-clamp-1">{project.title}</h4>
-                <p className="text-xs text-gray-400 line-clamp-2 mb-6 flex-1">{project.description}</p>
-                
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {project.technologies.slice(0, 3).map((tech, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-[#141922] border border-white/5 rounded-full text-[10px] font-medium text-gray-400">
-                      {tech}
-                    </span>
-                  ))}
-                  {project.technologies.length > 3 && (
-                    <span className="px-3 py-1 bg-[#141922] border border-white/5 rounded-full text-[10px] font-medium text-gray-400">
-                      +{project.technologies.length - 3}
-                    </span>
-                  )}
-                </div>
-              </div>
-              </TiltCard>
             </motion.div>
           ))}
-        </AnimatePresence>
+        </div>
       </div>
-    </SectionWrapper>
+    </section>
   );
 };
 
-const BlogSection = () => {
-  const posts: BlogPost[] = [
-    {
-      title: 'Design Conferences In 2022',
-      category: 'Design',
-      date: 'Feb 23, 2022',
-      description: 'Veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
-      image: 'https://picsum.photos/seed/conf/600/400',
-      link: 'https://github.com/satishthakur7576'
-    },
-    {
-      title: 'Best Fonts Every Designer',
-      category: 'Design',
-      date: 'Feb 23, 2022',
-      description: 'Sed ut perspiciatis, nam libero tempore, cum soluta nobis est eligendi.',
-      image: 'https://picsum.photos/seed/fonts/600/400',
-      link: 'https://github.com/satishthakur7576'
-    },
-    {
-      title: 'Design Digest #80',
-      category: 'Design',
-      date: 'Feb 23, 2022',
-      description: 'Excepteur sint occaecat cupidatat no proident, quis nostrum exercitationem ullam.',
-      image: 'https://picsum.photos/seed/digest/600/400',
-      link: 'https://github.com/satishthakur7576'
-    },
-  ];
-
+const ProjectsSection = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-    >
-      <h2 className="text-3xl font-bold mb-10 relative inline-block">
-        Blog
-        <div className="absolute -bottom-2 left-0 w-12 h-1.5 primary-gradient rounded-full" />
-      </h2>
+    <section id="projects" className="py-20">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">My Projects</h2>
+          <p className="text-gray-400">A showcase of my recent work</p>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {posts.map((post, i) => (
-          <motion.article
-            key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            whileHover={{ y: -10 }}
-            className="bg-bg-card border border-border-dark rounded-3xl overflow-hidden group cursor-pointer"
-            onClick={() => post.link && window.open(post.link, '_blank')}
-          >
-            <div className="aspect-video overflow-hidden">
-              <img
-                src={post.image}
-                alt={post.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="p-6">
-              <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
-                <span>{post.category}</span>
-                <div className="w-1 h-1 rounded-full bg-gray-600" />
-                <span>{post.date}</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {PROJECTS.map((project, i) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="bg-[#1A1F2E] border border-white/5 rounded-2xl overflow-hidden group hover:border-primary-start/30 transition-all flex flex-col"
+            >
+              <div className="aspect-video overflow-hidden relative">
+                <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
-              <h4 className="text-xl font-bold mb-3 group-hover:text-primary-start transition-colors">{post.title}</h4>
-              <p className="text-sm text-gray-400 line-clamp-2 leading-relaxed">{post.description}</p>
-            </div>
-          </motion.article>
-        ))}
+              <div className="p-6 flex-1 flex flex-col">
+                <div className="flex gap-2 mb-4">
+                  {project.tags.map((tag, idx) => (
+                    <span key={idx} className="text-[10px] uppercase tracking-wider px-3 py-1 bg-white/5 rounded-full text-gray-300">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
+                <p className="text-sm text-gray-400 mb-6 flex-1">{project.description}</p>
+                <div className="flex gap-4">
+                  <a href="#" className="flex-1 py-2 text-center text-sm font-medium border border-gray-600 rounded-lg text-white hover:bg-white/5 transition-colors flex items-center justify-center gap-2">
+                    <Code size={16} /> Code
+                  </a>
+                  <a href="#" className="flex-1 py-2 text-center text-sm font-bold bg-primary-start text-bg-dark rounded-lg hover:brightness-110 transition-colors flex items-center justify-center gap-2">
+                    <Globe size={16} /> Demo
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="flex justify-center">
+          <button className="px-8 py-3 bg-primary-start text-bg-dark font-bold rounded-full hover:brightness-110 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(249,115,22,0.3)]">
+            <ExternalLink size={18} />
+            View All Projects
+          </button>
+        </div>
       </div>
-    </motion.div>
+    </section>
   );
 };
 
 const ContactSection = () => {
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus('submitting');
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch('https://formsubmit.co/ajax/satishthakur7576@gmail.com', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json'
-        },
-        body: formData
-      });
-
-      if (response.ok) {
-        setStatus('success');
-        form.reset();
-        setTimeout(() => setStatus('idle'), 5000);
-      } else {
-        setStatus('error');
-      }
-    } catch (error) {
-      setStatus('error');
-    }
-  };
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="space-y-10"
-    >
-      <h2 className="text-3xl font-bold mb-8 relative inline-block">
-        Contact
-        <div className="absolute -bottom-2 left-0 w-12 h-1.5 primary-gradient rounded-full" />
-      </h2>
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        className="rounded-3xl overflow-hidden h-80 border border-border-dark grayscale brightness-50 contrast-125"
-      >
-        <iframe
-          src="https://maps.google.com/maps?q=Jorhat,%20Assam&t=&z=13&ie=UTF8&iwloc=&output=embed"
-          width="100%"
-          height="100%"
-          style={{ border: 0 }}
-          allowFullScreen
-          loading="lazy"
-        />
-      </motion.div>
-
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
-        <h3 className="text-2xl font-bold mb-8">Contact Form</h3>
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          {status === 'success' && (
-            <div className="p-4 bg-green-500/10 border border-green-500/20 text-green-400 rounded-2xl font-sm font-medium">
-              Message sent! Check your email inbox to verify FormSubmit if this is the first ever send.
-            </div>
-          )}
-          {status === 'error' && (
-            <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl font-sm font-medium">
-              Something went wrong. Please email directly!
-            </div>
-          )}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <input
-              type="text"
-              name="name"
-              required
-              placeholder="Full name"
-              className="w-full px-6 py-4 bg-transparent border border-border-dark rounded-2xl focus:outline-none focus:border-primary-start transition-colors"
-            />
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="Email address"
-              className="w-full px-6 py-4 bg-transparent border border-border-dark rounded-2xl focus:outline-none focus:border-primary-start transition-colors"
-            />
+    <section id="contact" className="py-20">
+      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="relative drop-shadow-2xl flex justify-center"
+        >
+          <div className="w-full max-w-[400px] aspect-square">
+            <img src="/contact_avatar.png" alt="Contact Avatar" className="w-full h-full object-contain" />
           </div>
-          <textarea
-            name="message"
-            required
-            placeholder="Your Message"
-            rows={5}
-            className="w-full px-6 py-4 bg-transparent border border-border-dark rounded-2xl focus:outline-none focus:border-primary-start transition-colors resize-none"
-          />
-          <div className="flex justify-end">
-            <motion.button
-              type="submit"
-              disabled={status === 'submitting'}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="flex items-center gap-2 px-8 py-4 primary-gradient text-bg-dark font-bold rounded-2xl hover:brightness-110 transition-all group shadow-lg active:shadow-none disabled:opacity-50"
-            >
-              {status === 'submitting' ? (
-                <span>Sending...</span>
-              ) : (
-                <>
-                  <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                  Send Message
-                </>
-              )}
-            </motion.button>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+        >
+          <div className="mb-10 text-center lg:text-left">
+            <h2 className="text-4xl font-bold text-white mb-4">Get In Touch</h2>
+            <p className="text-gray-400">Let's discuss your project</p>
           </div>
-        </form>
-      </motion.section>
-    </motion.div>
+
+          <form className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <input type="text" placeholder="First Name" className="w-full bg-[#1A1F2E] border border-white/5 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-primary-start/50 transition-colors" />
+              <input type="text" placeholder="Last Name" className="w-full bg-[#1A1F2E] border border-white/5 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-primary-start/50 transition-colors" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <input type="email" placeholder="Email Address" className="w-full bg-[#1A1F2E] border border-white/5 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-primary-start/50 transition-colors" />
+              <input type="tel" placeholder="Phone Number" className="w-full bg-[#1A1F2E] border border-white/5 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-primary-start/50 transition-colors" />
+            </div>
+            <textarea placeholder="Your Message" rows={5} className="w-full bg-[#1A1F2E] border border-white/5 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-primary-start/50 transition-colors resize-none"></textarea>
+            <button className="w-full py-4 bg-primary-start text-bg-dark font-bold rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-2">
+              Send Message
+            </button>
+          </form>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+const Footer = () => {
+  return (
+    <footer className="bg-[#0f141e] py-10 border-t border-white/5">
+      <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+          <a href="#home" className="text-2xl font-bold text-white flex items-center gap-1">
+            Portfolio<span className="text-primary-start">.</span>
+          </a>
+          <p className="text-sm text-gray-500 mt-2">Full Stack Developer & UI/UX Designer</p>
+        </div>
+        
+        <div className="flex gap-6 text-sm text-gray-400">
+          <a href="#home" className="hover:text-white transition-colors">Home</a>
+          <a href="#about" className="hover:text-white transition-colors">About</a>
+          <a href="#skills" className="hover:text-white transition-colors">Skills</a>
+          <a href="#projects" className="hover:text-white transition-colors">Projects</a>
+          <a href="#contact" className="hover:text-white transition-colors">Contact</a>
+        </div>
+
+        <div className="flex gap-4">
+          <a href="#" className="text-gray-400 hover:text-white"><Github size={20} /></a>
+          <a href="#" className="text-gray-400 hover:text-white"><Twitter size={20} /></a>
+          <a href="#" className="text-gray-400 hover:text-white"><Linkedin size={20} /></a>
+        </div>
+      </div>
+      <div className="text-center text-xs text-gray-600 mt-8">
+        &copy; 2026 Satish Thakur. All rights reserved.
+      </div>
+    </footer>
   );
 };
 
 // --- Main App ---
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<Tab>('About');
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -746,43 +503,26 @@ export default function App() {
     restDelta: 0.001
   });
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'About': return <AboutSection setActiveTab={setActiveTab} />;
-      case 'Resume': return <ResumeSection />;
-      case 'Portfolio': return <PortfolioSection />;
-      case 'Blog': return <BlogSection />;
-      case 'Contact': return <ContactSection />;
-    }
-  };
-
   return (
-    <HashRouter>
+    <div className="bg-bg-dark min-h-screen text-gray-300 font-sans selection:bg-primary-start selection:text-bg-dark">
       <AnimatedBackground />
       <CursorGlow />
       <motion.div 
         className="fixed top-0 left-0 right-0 h-1 bg-primary-start origin-left z-[9999]" 
         style={{ scaleX }} 
       />
-      <div className="min-h-screen py-8 lg:py-16 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 items-center lg:items-start relative z-10">
-        <IconSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      
+      <Navbar />
+      
+      <main className="relative z-10">
+        <HeroSection />
+        <AboutSection />
+        <SkillsSection />
+        <ProjectsSection />
+        <ContactSection />
+      </main>
 
-        <main className="flex-1 w-full glass-panel rounded-[2.5rem] flex flex-col min-h-[700px] relative overflow-hidden">
-          <div className="p-8 lg:p-16 flex-1">
-            <AnimatePresence mode="wait">
-              <div key={activeTab}>
-                {renderContent()}
-              </div>
-            </AnimatePresence>
-          </div>
-        </main>
-      </div>
-
-      <AnimatePresence>
-        <Routes>
-          <Route path="/project/:projectId" element={<ProjectModal projects={PROJECTS} />} />
-        </Routes>
-      </AnimatePresence>
-    </HashRouter>
+      <Footer />
+    </div>
   );
 }

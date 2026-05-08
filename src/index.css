@@ -5,11 +5,11 @@
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Outfit", sans-serif;
   
-  --color-primary-start: #00E5FF;
-  --color-primary-end: #0088FF;
-  --color-bg-dark: #141922;
-  --color-bg-card: #1A1F2E;
-  --color-border-dark: #2A3143;
+  --color-primary-start: #f97316;
+  --color-primary-end: #ea580c;
+  --color-bg-dark: #111827;
+  --color-bg-card: #1f2937;
+  --color-border-dark: #374151;
 
   --animate-blob: blob 15s infinite;
 }
@@ -52,16 +52,16 @@
   /* Animated Mesh Background Classes */
   .mesh-blob-1 {
     @apply absolute w-[800px] h-[800px] rounded-full mix-blend-screen filter blur-[100px] opacity-40 animate-blob;
-    background: radial-gradient(circle, rgba(0,229,255,0.4) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(249,115,22,0.15) 0%, transparent 70%);
   }
   .mesh-blob-2 {
     @apply absolute w-[600px] h-[600px] rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-blob;
-    background: radial-gradient(circle, rgba(0,136,255,0.4) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(234,88,12,0.15) 0%, transparent 70%);
     animation-delay: 2s;
   }
   .mesh-blob-3 {
     @apply absolute w-[700px] h-[700px] rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-blob;
-    background: radial-gradient(circle, rgba(143,189,249,0.3) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(251,146,60,0.15) 0%, transparent 70%);
     animation-delay: 4s;
   }
 }
@@ -94,7 +94,7 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00f2fe;
+  background: #f97316;
 }
 
 /* Cursor Glow */
@@ -105,7 +105,7 @@
   left: 0;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(0, 242, 254, 0.05) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.05) 0%, transparent 70%);
   border-radius: 50%;
   z-index: 9999;
   mix-blend-mode: screen;
@@ -124,6 +124,6 @@
   background: rgba(255, 255, 255, 0.04);
   box-shadow: 
     0 30px 60px -12px rgba(0, 0, 0, 0.8),
-    0 0 25px rgba(0, 242, 254, 0.05);
-  border-color: rgba(0, 242, 254, 0.15);
+    0 0 25px rgba(249, 115, 22, 0.05);
+  border-color: rgba(249, 115, 22, 0.15);
 }
