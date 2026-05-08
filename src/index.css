@@ -82,20 +82,23 @@
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-bg-dark;
+  background: var(--color-bg-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-border-dark rounded-full;
+  background: #374151;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #f97316;
+  background: var(--color-primary-start);
 }
+
+
 
 /* Cursor Glow */
 .cursor-glow {
