@@ -232,10 +232,18 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="relative flex justify-center lg:justify-end"
         >
-          {/* Using mix-blend-screen to remove the black background and blend the image cleanly into the dark theme */}
-          <div className="w-full max-w-[600px] aspect-square relative z-0 mix-blend-screen" style={{ maskImage: 'radial-gradient(circle at center, black 60%, transparent 100%)', WebkitMaskImage: 'radial-gradient(circle at center, black 60%, transparent 100%)' }}>
-            <img src="/hero_avatar.png" alt="Creative Editor Avatar" className="w-full h-full object-contain" />
-          </div>
+          <motion.div 
+            animate={{ y: [-15, 15, -15] }}
+            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+            className="w-full max-w-[600px] aspect-square relative z-0"
+          >
+            <img 
+              src="/hero_avatar_transparent.png" 
+              alt="Creative Editor Avatar" 
+              className="w-full h-full object-contain" 
+              style={{ filter: 'drop-shadow(0 0 40px rgba(249,115,22,0.5)) drop-shadow(0 0 80px rgba(236,72,153,0.3))' }}
+            />
+          </motion.div>
         </motion.div>
       </div>
     </section>
@@ -251,11 +259,20 @@ const AboutSection = () => {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="order-2 lg:order-1 relative mix-blend-screen"
+          className="order-2 lg:order-1 relative"
         >
-           <div className="w-full max-w-[600px] mx-auto aspect-square relative z-0" style={{ maskImage: 'radial-gradient(circle at center, black 60%, transparent 100%)', WebkitMaskImage: 'radial-gradient(circle at center, black 60%, transparent 100%)' }}>
-            <img src="/about_avatar.png" alt="Digital Artist Avatar" className="w-full h-full object-contain" />
-          </div>
+           <motion.div 
+             animate={{ y: [-15, 15, -15] }}
+             transition={{ repeat: Infinity, duration: 6, ease: "easeInOut", delay: 1 }}
+             className="w-full max-w-[600px] mx-auto aspect-square relative z-0"
+           >
+            <img 
+              src="/about_avatar_transparent.png" 
+              alt="Digital Artist Avatar" 
+              className="w-full h-full object-contain" 
+              style={{ filter: 'drop-shadow(0 0 40px rgba(249,115,22,0.4)) drop-shadow(0 0 80px rgba(168,85,247,0.3))' }}
+            />
+          </motion.div>
         </motion.div>
 
         <motion.div
@@ -415,11 +432,20 @@ const ContactSection = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative flex justify-center mix-blend-screen"
+          className="relative flex justify-center"
         >
-          <div className="w-full max-w-[500px] aspect-square relative" style={{ maskImage: 'radial-gradient(circle at center, black 60%, transparent 100%)', WebkitMaskImage: 'radial-gradient(circle at center, black 60%, transparent 100%)' }}>
-            <img src="/contact_avatar.png" alt="Contact Avatar" className="w-full h-full object-contain" />
-          </div>
+          <motion.div 
+            animate={{ y: [-10, 10, -10] }}
+            transition={{ repeat: Infinity, duration: 5.5, ease: "easeInOut", delay: 0.5 }}
+            className="w-full max-w-[500px] aspect-square relative"
+          >
+            <img 
+              src="/contact_avatar_transparent.png" 
+              alt="Contact Avatar" 
+              className="w-full h-full object-contain" 
+              style={{ filter: 'drop-shadow(0 0 40px rgba(249,115,22,0.4)) drop-shadow(0 0 60px rgba(249,115,22,0.2))' }}
+            />
+          </motion.div>
         </motion.div>
 
         <motion.div
