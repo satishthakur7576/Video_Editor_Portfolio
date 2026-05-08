@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, useScroll, useSpring } from 'motion/react';
 import {
-  Mail, Phone, Github, Instagram, Youtube, Twitter, Menu, X, ExternalLink, Code, Download, Send, Globe, Sun
+  Mail, Phone, Github, Instagram, Youtube, Twitter, Linkedin, Menu, X, ExternalLink, Code, Download, Send, Globe, Sun
 } from 'lucide-react';
 import { CursorGlow, Magnetic, SectionWrapper, AnimatedBackground } from './components/Effects';
 
