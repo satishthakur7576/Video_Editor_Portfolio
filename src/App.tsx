@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, useScroll, useSpring } from 'motion/react';
 import {
-  Mail, Phone, Github, Instagram, Youtube, Twitter, Linkedin, Menu, X, ExternalLink, Code, Download, Send, Globe, Sun, Play, MonitorPlay, Film, PenTool, Layers
+  Mail, Phone, Github, Instagram, Youtube, Twitter, Linkedin, Menu, X, ExternalLink, Code, Download, Send, Globe, Sun, Play, MonitorPlay, Film, PenTool, Layers, Clapperboard, Video, Scissors, Camera, Palette, Wand2
 } from 'lucide-react';
 import { CursorGlow, Magnetic, SectionWrapper, AnimatedBackground } from './components/Effects';
 
@@ -177,16 +177,34 @@ const Navbar = () => {
 
 const SocialLinks = () => (
   <div className="flex items-center gap-4 mb-8">
-    <a href="#" className="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 flex items-center justify-center text-white hover:scale-110 transition-transform">
+    <a href="#" className="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 flex items-center justify-center text-white hover:scale-110 transition-transform shadow-[0_0_15px_rgba(236,72,153,0.3)]">
       <Instagram size={20} />
     </a>
-    <a href="#" className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center text-white hover:scale-110 transition-transform">
+    <a href="#" className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center text-white hover:scale-110 transition-transform shadow-[0_0_15px_rgba(220,38,38,0.3)]">
       <Youtube size={20} />
     </a>
-    <a href="#" className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white hover:scale-110 transition-transform">
+    <a href="#" className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white hover:scale-110 transition-transform shadow-[0_0_15px_rgba(37,99,235,0.3)]">
       <MonitorPlay size={20} />
     </a>
   </div>
+);
+
+const FloatingIcon = ({ children, className, delay, duration, yOffset, rotateOffset }: any) => (
+  <motion.div
+    animate={{ 
+      y: [0, yOffset, 0],
+      rotate: [0, rotateOffset, 0]
+    }}
+    transition={{ 
+      repeat: Infinity, 
+      duration: duration || 5, 
+      ease: "easeInOut",
+      delay: delay || 0
+    }}
+    className={`absolute z-20 flex items-center justify-center w-14 h-14 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl ${className}`}
+  >
+    {children}
+  </motion.div>
 );
 
 const HeroSection = () => {
@@ -232,6 +250,23 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="relative flex justify-center lg:justify-end"
         >
+          {/* Floating Web Inspiration Elements */}
+          <FloatingIcon className="top-10 -left-4 text-pink-500" delay={0} duration={6} yOffset={-20} rotateOffset={15}>
+            <Clapperboard size={24} />
+          </FloatingIcon>
+          <FloatingIcon className="top-40 -right-8 text-cyan-400" delay={1.5} duration={7} yOffset={25} rotateOffset={-20}>
+            <Scissors size={24} />
+          </FloatingIcon>
+          <FloatingIcon className="bottom-20 -left-12 text-primary-start" delay={0.5} duration={5.5} yOffset={15} rotateOffset={10}>
+            <Palette size={24} />
+          </FloatingIcon>
+          <FloatingIcon className="bottom-10 right-4 text-purple-400" delay={2} duration={8} yOffset={-25} rotateOffset={-15}>
+            <MonitorPlay size={24} />
+          </FloatingIcon>
+          <FloatingIcon className="top-0 right-10 text-yellow-400 w-10 h-10" delay={1} duration={4} yOffset={10} rotateOffset={30}>
+            <Wand2 size={18} />
+          </FloatingIcon>
+
           <motion.div 
             animate={{ y: [-15, 15, -15] }}
             transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
