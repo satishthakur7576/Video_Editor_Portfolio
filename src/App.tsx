@@ -33,12 +33,12 @@ const PhotoshopIcon = () => (
 
 // --- Data ---
 const SKILLS = [
-  { name: 'Premiere Pro', percentage: 95, icon: <PremiereIcon /> },
-  { name: 'After Effects', percentage: 90, icon: <AfterEffectsIcon /> },
-  { name: 'Photoshop', percentage: 88, icon: <PhotoshopIcon /> },
-  { name: 'Cinematic Editing', percentage: 95, icon: <Film className="text-white" /> },
-  { name: 'Gaming Content', percentage: 92, icon: <Gamepad2 className="text-white" /> },
-  { name: 'Thumbnail Design', percentage: 85, icon: <Palette className="text-white" /> },
+  { name: 'Premiere Pro', experience: '3+ Years', techniques: 'Color Grading, Motion Tracking, Pacing', icon: <PremiereIcon /> },
+  { name: 'After Effects', experience: '2.5+ Years', techniques: 'VFX, Rotoscoping, Kinetic Typography', icon: <AfterEffectsIcon /> },
+  { name: 'Photoshop', experience: '3+ Years', techniques: 'Compositing, Typography, Color Theory', icon: <PhotoshopIcon /> },
+  { name: 'Cinematic Editing', experience: '150+ Videos', techniques: 'Storytelling, Sound Sync, Flow', icon: <Film className="text-white" /> },
+  { name: 'Gaming Content', experience: '2 Channels', techniques: 'Highlight Reels, Montages, Shorts', icon: <Gamepad2 className="text-white" /> },
+  { name: 'Thumbnail Design', experience: 'High CTR', techniques: 'A/B Testing, Layouts, Branding', icon: <Palette className="text-white" /> },
 ];
 
 const PROJECTS = [
@@ -72,13 +72,29 @@ const PROJECTS = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'experience', 'skills', 'work', 'channels', 'contact'];
+      const scrollPosition = window.scrollY + 200;
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element && element.offsetTop <= scrollPosition && element.offsetTop + element.offsetHeight > scrollPosition) {
+          setActiveSection(section);
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
-    { name: 'Experience', href: '#experience' },
+    { name: 'Work', href: '#work' },
     { name: 'Skills', href: '#skills' },
-    { name: 'Work', href: '#projects' },
+    { name: 'Channels', href: '#channels' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -92,7 +108,11 @@ const Navbar = () => {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6 font-medium">
           {navLinks.map((link) => (
-            <a key={link.name} href={link.href} className="text-sm text-gray-300 hover:text-white transition-colors">
+            <a 
+              key={link.name} 
+              href={link.href} 
+              className={`text-sm transition-colors ${activeSection === link.href.substring(1) ? 'text-white font-bold' : 'text-gray-300 hover:text-white'}`}
+            >
               {link.name}
             </a>
           ))}
@@ -173,7 +193,7 @@ const Marquee = () => {
       <motion.div
         className="text-bg-dark font-black text-2xl tracking-widest flex items-center gap-10"
         animate={{ x: [0, -1000] }}
-        transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+        transition={{ repeat: Infinity, duration: 35, ease: "linear" }}
       >
         <span>{text}</span>
         <span>{text}</span>
@@ -224,7 +244,7 @@ const HeroSection = () => {
             transition={{ delay: 1, duration: 0.8 }}
             className="text-gray-400 text-xl mb-12 max-w-lg leading-relaxed font-light"
           >
-            Creative video editor and content creator skilled in cinematic editing, anime edits, gaming content, and short-form videos with a relentless focus on audience retention.
+            Engineering precision meets cinematic storytelling. Helping gaming and anime channels maximize retention through high-energy edits, flawless sound design, and data-driven thumbnails.
           </motion.p>
           
           <motion.div 
@@ -327,16 +347,16 @@ const AboutSection = () => {
 
           <div className="grid grid-cols-3 gap-8 mb-12 text-center lg:text-left">
             <div>
-              <h3 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-start to-pink-500 mb-2">2</h3>
-              <p className="text-sm text-gray-500 uppercase tracking-widest font-bold">Active Channels</p>
+              <h3 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-start to-pink-500 mb-2">150+</h3>
+              <p className="text-sm text-gray-500 uppercase tracking-widest font-bold">Videos Edited</p>
             </div>
             <div>
-              <h3 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-start to-pink-500 mb-2">Eng</h3>
-              <p className="text-sm text-gray-500 uppercase tracking-widest font-bold">Student</p>
+              <h3 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-start to-pink-500 mb-2">3+</h3>
+              <p className="text-sm text-gray-500 uppercase tracking-widest font-bold">Years Exp.</p>
             </div>
             <div>
-              <h3 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-start to-pink-500 mb-2">Pro</h3>
-              <p className="text-sm text-gray-500 uppercase tracking-widest font-bold">Editing Styles</p>
+              <h3 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-start to-pink-500 mb-2">10K+</h3>
+              <p className="text-sm text-gray-500 uppercase tracking-widest font-bold">Subscribers</p>
             </div>
           </div>
 
@@ -450,19 +470,14 @@ const SkillsSection = () => {
               
               <div className="relative z-10">
                 <div className="flex justify-between text-sm mb-3">
-                  <span className="text-gray-500 font-medium uppercase tracking-wider">Proficiency</span>
-                  <span className="text-primary-start font-black">{skill.percentage}%</span>
+                  <span className="text-gray-500 font-medium uppercase tracking-wider">Experience</span>
+                  <span className="text-primary-start font-black">{skill.experience}</span>
                 </div>
-                <div className="h-3 bg-black/60 rounded-full overflow-hidden shadow-inner border border-white/5">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.percentage}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
-                    className="h-full bg-gradient-to-r from-pink-500 via-primary-end to-primary-start rounded-full relative"
-                  >
-                     <div className="absolute top-0 right-0 bottom-0 w-12 bg-gradient-to-r from-transparent to-white/40" />
-                  </motion.div>
+                <div className="mt-4 pt-4 border-t border-white/5">
+                  <p className="text-sm text-gray-400 font-light leading-relaxed">
+                    <span className="text-white/40 font-medium block mb-1">Key Techniques:</span>
+                    {skill.techniques}
+                  </p>
                 </div>
               </div>
             </motion.div>
@@ -473,9 +488,92 @@ const SkillsSection = () => {
   );
 };
 
-const ProjectsSection = () => {
+const FeaturedWorkSection = () => {
+  const videos = [
+    { id: 'jfKfPfyJRdk', title: 'Cinematic Edit Showcase' },
+    { id: 'dQw4w9WgXcQ', title: 'High-Energy Gaming Montage' },
+    { id: 'jfKfPfyJRdk', title: 'Anime Edit Mastery' }
+  ];
+
   return (
-    <section id="projects" className="py-32 relative bg-black/40">
+    <section id="work" className="py-32 relative">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-20">
+          <h2 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tighter">FEATURED <span className="text-primary-start">WORK</span></h2>
+          <p className="text-gray-400 font-light text-xl max-w-2xl mx-auto">Watch my best edits directly. No redirects, just pure cinematic pacing and flawless sound design.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {videos.map((vid, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.2 }}
+              className="bg-black/50 border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+            >
+              <div className="aspect-video relative bg-black">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${vid.id}?modestbranding=1&rel=0`}
+                  title={vid.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full"
+                ></iframe>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-white">{vid.title}</h3>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ThumbnailGallerySection = () => {
+  const thumbnails = [
+    'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=800&auto=format&fit=crop',
+  ];
+
+  return (
+    <section id="thumbnails" className="py-32 relative bg-black/20 border-y border-white/5">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-20">
+          <h2 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tighter">HIGH-CTR <span className="text-primary-start">THUMBNAILS</span></h2>
+          <p className="text-gray-400 font-light text-xl max-w-2xl mx-auto">Custom designs engineered in Photoshop to drastically increase click-through rates.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          {thumbnails.map((thumb, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="aspect-video rounded-2xl overflow-hidden border border-white/10 group cursor-pointer shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:shadow-[0_20px_60px_rgba(249,115,22,0.2)] hover:border-primary-start/40 transition-all"
+            >
+              <img src={thumb} alt={`Thumbnail ${i+1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100" />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ChannelsSection = () => {
+  return (
+    <section id="channels" className="py-32 relative bg-black/40">
       <div className="container mx-auto px-6">
         <div className="text-center mb-20">
           <h2 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tighter">FEATURED <span className="text-primary-start">CHANNELS</span></h2>
@@ -527,6 +625,7 @@ const ProjectsSection = () => {
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', message: '' });
+  const [status, setStatus] = useState<'idle' | 'success'>('idle');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -537,6 +636,9 @@ const ContactSection = () => {
     const subject = `New Project Inquiry from ${formData.firstName} ${formData.lastName}`;
     const body = `Name: ${formData.firstName} ${formData.lastName}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`;
     window.location.href = `mailto:satishthakur7576@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setStatus('success');
+    setTimeout(() => setStatus('idle'), 5000);
+    setFormData({ firstName: '', lastName: '', email: '', phone: '', message: '' });
   };
 
   return (
@@ -596,8 +698,7 @@ const ContactSection = () => {
             </div>
             <textarea required name="message" onChange={handleChange} placeholder="Tell me about your project..." rows={5} className="w-full bg-black/40 border border-white/5 rounded-xl px-6 py-5 text-white focus:outline-none focus:border-primary-start/50 focus:bg-black/60 transition-all resize-none placeholder-gray-600 font-light text-lg"></textarea>
             <button type="submit" className="w-full py-5 bg-primary-start text-bg-dark font-black rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-3 uppercase tracking-widest text-lg shadow-[0_0_30px_rgba(249,115,22,0.3)]">
-              <Send size={22} />
-              Send Brief
+              {status === 'success' ? 'Message Sent!' : <><Send size={22} /> Send Brief</>}
             </button>
           </form>
         </motion.div>
@@ -663,7 +764,9 @@ export default function App() {
         <AboutSection />
         <ExperienceSection />
         <SkillsSection />
-        <ProjectsSection />
+        <FeaturedWorkSection />
+        <ThumbnailGallerySection />
+        <ChannelsSection />
         <ContactSection />
       </main>
 
