@@ -53,7 +53,7 @@ const PROJECTS = [
   {
     id: 2,
     title: 'Gaming Content & Shorts',
-    image: '/project2.png',
+    image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600&auto=format&fit=crop', // Gaming aesthetic placeholder
     tags: ['Premiere Pro', 'Sound Design', 'VOLT444'],
     description: 'High-energy gameplay videos, short reels, and social media content tailored to gaming audiences with precise beat-matching.',
     link: 'https://youtube.com/@_volt_444_'
@@ -61,7 +61,7 @@ const PROJECTS = [
   {
     id: 3,
     title: 'High-CTR Thumbnails',
-    image: '/project3.png',
+    image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=600&auto=format&fit=crop', // Graphic design placeholder
     tags: ['Photoshop', 'Graphic Design'],
     description: 'Engaging custom thumbnails designed in Adobe Photoshop to drastically increase click-through rates and channel discoverability.',
     link: 'https://instagram.com/volt.editsz'
@@ -305,7 +305,7 @@ const AboutSection = () => {
              className="w-full max-w-[650px] mx-auto aspect-square relative z-0"
            >
             <img 
-              src="/about_avatar_transparent.png" 
+              src="/project2.png" 
               alt="Digital Artist Avatar" 
               className="w-full h-full object-contain contrast-125 saturate-150 brightness-105" 
               style={{ filter: 'drop-shadow(0 0 50px rgba(249,115,22,0.4)) drop-shadow(0 0 100px rgba(168,85,247,0.3))' }}
@@ -554,7 +554,7 @@ const ContactSection = () => {
             className="w-full max-w-[550px] aspect-square relative"
           >
             <img 
-              src="/contact_avatar_transparent.png" 
+              src="/project3.png" 
               alt="Contact Avatar" 
               className="w-full h-full object-contain contrast-125 saturate-150 brightness-105" 
               style={{ filter: 'drop-shadow(0 0 50px rgba(249,115,22,0.4)) drop-shadow(0 0 80px rgba(249,115,22,0.2))' }}
