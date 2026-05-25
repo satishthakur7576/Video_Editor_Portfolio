@@ -5,40 +5,50 @@ import {
 } from 'lucide-react';
 import { CursorGlow, Magnetic, SectionWrapper, AnimatedBackground } from './components/Effects';
 
-// Custom SVG Icons for Creative Tools
-const PremiereIcon = () => (
-  <svg viewBox="0 0 24 24" fill="#9999FF" className="w-6 h-6">
-    <path d="M0 0h24v24H0V0z" fill="#00005B"/>
-    <path d="M6.2 16.5v-9h4.8c1.3 0 2.2.3 2.8.8.7.6 1 1.4 1 2.5 0 1.1-.3 1.9-1 2.5-.6.6-1.6.8-2.8.8H8.5v2.4H6.2zm2.3-4.2h2.2c.6 0 1.1-.1 1.4-.4.3-.3.5-.7.5-1.2 0-.5-.2-.9-.5-1.2-.3-.3-.8-.4-1.4-.4H8.5v3.2z" fill="#E685FF"/>
-    <path d="M15.5 16.5v-6.6h2.2v1.1c.3-.5.7-.8 1.2-1 .5-.2 1-.3 1.5-.3v2.3c-.2 0-.4-.1-.7-.1-.6 0-1.1.2-1.5.5-.4.4-.6 1-.6 1.7v2.4h-2.1z" fill="#E685FF"/>
-  </svg>
-);
-
-const AfterEffectsIcon = () => (
-  <svg viewBox="0 0 24 24" fill="#9999FF" className="w-6 h-6">
-    <path d="M0 0h24v24H0V0z" fill="#00005B"/>
-    <path d="M9.8 16.5l-1.3-3.6H4.3l-1.2 3.6H1l5.5-13h2.3l5.3 13H9.8zm-2-5.4l-1.4-3.9c-.1-.2-.6-.3-1h-.1c-.1.4-.2.8-.3 1l-1.4 3.9h3.5z" fill="#D291FF"/>
-    <path d="M14.5 16.5v-9h5.6v2H16.8v1.6h2.8v1.8h-2.8v1.8h3.1v1.8h-5.4z" fill="#D291FF"/>
-  </svg>
-);
-
-const PhotoshopIcon = () => (
-  <svg viewBox="0 0 24 24" fill="#31A8FF" className="w-6 h-6">
-    <path d="M0 0h24v24H0V0z" fill="#001E36"/>
-    <path d="M6.2 16.5v-9h4.8c1.3 0 2.2.3 2.8.8.7.6 1 1.4 1 2.5 0 1.1-.3 1.9-1 2.5-.6.6-1.6.8-2.8.8H8.5v2.4H6.2zm2.3-4.2h2.2c.6 0 1.1-.1 1.4-.4.3-.3.5-.7.5-1.2 0-.5-.2-.9-.5-1.2-.3-.3-.8-.4-1.4-.4H8.5v3.2z" fill="#31A8FF"/>
-    <path d="M19.7 13.9c0 1-.3 1.7-.8 2.3-.6.6-1.4.9-2.5.9-.6 0-1.1-.1-1.6-.3-.5-.2-.9-.6-1.1-1l1.5-1.4c.4.5.8.7 1.3.7.3 0 .5-.1.7-.2.1-.1.2-.3.2-.5 0-.2-.1-.4-.3-.5-.1-.1-.6-.3-1.4-.5-1.1-.3-1.8-.7-2.2-1.1-.4-.4-.6-1-.6-1.7 0-.9.3-1.6.9-2.1.6-.5 1.4-.8 2.3-.8.6 0 1.1.1 1.6.3.5.2.9.5 1.2.9l-1.6 1.3c-.3-.4-.7-.5-1.2-.5-.2 0-.4.1-.5.2-.1.1-.2.3-.2.5 0 .2.1.3.3.4.1.1.5.3 1.3.5 1.1.3 1.8.7 2.2 1.1.4.4.6 1 .6 1.7z" fill="#31A8FF"/>
-  </svg>
-);
-
-
 // --- Data ---
 const SKILLS = [
-  { name: 'Premiere Pro', experience: '3+ Years', techniques: 'Color Grading, Motion Tracking, Pacing', icon: <PremiereIcon /> },
-  { name: 'After Effects', experience: '2.5+ Years', techniques: 'VFX, Rotoscoping, Kinetic Typography', icon: <AfterEffectsIcon /> },
-  { name: 'Photoshop', experience: '3+ Years', techniques: 'Compositing, Typography, Color Theory', icon: <PhotoshopIcon /> },
-  { name: 'Cinematic Editing', experience: '150+ Videos', techniques: 'Storytelling, Sound Sync, Flow', icon: <Film className="text-white" /> },
-  { name: 'Gaming Content', experience: '2 Channels', techniques: 'Highlight Reels, Montages, Shorts', icon: <Gamepad2 className="text-white" /> },
-  { name: 'Thumbnail Design', experience: 'High CTR', techniques: 'A/B Testing, Layouts, Branding', icon: <Palette className="text-white" /> },
+  { 
+    name: 'Premiere Pro', 
+    experience: '3+ Years', 
+    techniques: 'Color Grading, Motion Tracking, Pacing', 
+    color: 'from-[#ea77ff] to-[#9999ff]',
+    icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/premierepro/premierepro-original.svg" alt="Premiere Pro" className="w-12 h-12" />
+  },
+  { 
+    name: 'After Effects', 
+    experience: '2.5+ Years', 
+    techniques: 'VFX, Rotoscoping, Kinetic Typography', 
+    color: 'from-[#9999ff] to-[#00005b]',
+    icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/aftereffects/aftereffects-original.svg" alt="After Effects" className="w-12 h-12" />
+  },
+  { 
+    name: 'Photoshop', 
+    experience: '3+ Years', 
+    techniques: 'Compositing, Typography, Color Theory', 
+    color: 'from-[#31a8ff] to-[#001e36]',
+    icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg" alt="Photoshop" className="w-12 h-12" />
+  },
+  { 
+    name: 'Cinematic Editing', 
+    experience: '150+ Videos', 
+    techniques: 'Storytelling, Sound Sync, Flow', 
+    color: 'from-pink-500 to-purple-500',
+    icon: <Film className="w-10 h-10 text-white" />
+  },
+  { 
+    name: 'Gaming Content', 
+    experience: '2 Channels', 
+    techniques: 'Highlight Reels, Montages, Shorts', 
+    color: 'from-cyan-400 to-blue-600',
+    icon: <Gamepad2 className="w-10 h-10 text-white" />
+  },
+  { 
+    name: 'Thumbnail Design', 
+    experience: 'High CTR', 
+    techniques: 'A/B Testing, Layouts, Branding', 
+    color: 'from-orange-400 to-red-500',
+    icon: <Palette className="w-10 h-10 text-white" />
+  },
 ];
 
 const PROJECTS = [
@@ -438,12 +448,14 @@ const ExperienceSection = () => {
 
 const SkillsSection = () => {
   return (
-    <section id="skills" className="py-32 relative">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-20">
-          <h2 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tighter">ARSENAL</h2>
+    <section id="skills" className="py-32 relative overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-start/5 rounded-full blur-[120px] pointer-events-none"></div>
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center mb-24">
+          <h2 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tighter">THE <span className="text-primary-start">ARSENAL</span></h2>
           <p className="text-gray-400 max-w-2xl mx-auto font-light text-xl">
-            The software and techniques I use to maximize audience retention.
+            My creative stack. High-end tools and techniques engineered for maximum viewer retention.
           </p>
         </div>
 
@@ -451,33 +463,45 @@ const SkillsSection = () => {
           {SKILLS.map((skill, i) => (
             <motion.div
               key={skill.name}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.02, y: -5 }}
+              whileHover={{ y: -10 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, type: "spring", stiffness: 300, damping: 20 }}
-              className="bg-white/[0.02] backdrop-blur-2xl border border-white/5 rounded-3xl p-8 hover:border-primary-start/40 transition-colors group shadow-[0_30px_60px_rgba(0,0,0,0.5)] hover:shadow-[0_40px_80px_rgba(249,115,22,0.15)] relative overflow-hidden cursor-default"
+              className="group relative"
             >
-              <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
-                {skill.icon}
-              </div>
-              <div className="flex items-center gap-6 mb-8 relative z-10">
-                <div className="w-16 h-16 rounded-2xl bg-black/40 flex items-center justify-center border border-white/10 shadow-inner">
+              <div className={`absolute -inset-0.5 bg-gradient-to-br ${skill.color} rounded-[2rem] opacity-0 group-hover:opacity-100 blur-md transition-all duration-500`}></div>
+              
+              <div className="relative bg-[#0a0f18]/80 backdrop-blur-2xl border border-white/10 rounded-[2rem] p-8 h-full shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden transition-all duration-500 group-hover:bg-[#111724]">
+                
+                {/* Background Watermark Icon */}
+                <div className="absolute -right-6 -bottom-6 opacity-[0.02] group-hover:opacity-[0.05] transition-all duration-500 group-hover:scale-110 pointer-events-none scale-[3]">
                   {skill.icon}
                 </div>
-                <h3 className="text-white font-bold text-xl">{skill.name}</h3>
-              </div>
-              
-              <div className="relative z-10">
-                <div className="flex justify-between text-sm mb-3">
-                  <span className="text-gray-500 font-medium uppercase tracking-wider">Experience</span>
-                  <span className="text-primary-start font-black">{skill.experience}</span>
+                
+                <div className="flex items-center gap-6 mb-8 relative z-10">
+                  <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${skill.color} p-0.5 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
+                    <div className="w-full h-full bg-[#0a0f18] rounded-2xl flex items-center justify-center">
+                      {skill.icon}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-white font-black text-2xl tracking-tight mb-1">{skill.name}</h3>
+                    <div className="text-primary-start font-bold uppercase tracking-widest text-xs">{skill.experience}</div>
+                  </div>
                 </div>
-                <div className="mt-4 pt-4 border-t border-white/5">
-                  <p className="text-sm text-gray-400 font-light leading-relaxed">
-                    <span className="text-white/40 font-medium block mb-1">Key Techniques:</span>
-                    {skill.techniques}
-                  </p>
+                
+                <div className="relative z-10">
+                  <div className="mt-6 pt-6 border-t border-white/10 group-hover:border-white/20 transition-colors">
+                    <span className="text-white/40 font-medium text-xs uppercase tracking-widest block mb-3">Key Techniques</span>
+                    <div className="flex flex-wrap gap-2">
+                      {skill.techniques.split(', ').map((tech, idx) => (
+                        <span key={idx} className="px-3 py-1.5 bg-white/5 border border-white/5 rounded-lg text-sm text-gray-300 font-light shadow-sm group-hover:bg-white/10 transition-colors">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
