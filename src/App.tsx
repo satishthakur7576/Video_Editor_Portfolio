@@ -343,12 +343,12 @@ const AboutSection = () => {
             className="relative"
           >
             <div className="absolute -inset-4 bg-gradient-to-br from-primary-start/20 to-pink-500/20 rounded-[3rem] blur-2xl -z-10"></div>
-            <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.8)] relative group">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+            <div className="aspect-square rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.8)] relative group bg-[#0a0f18]">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 pointer-events-none"></div>
               <img 
                 src="/project2.png" 
                 alt="Editing Setup" 
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out saturate-150 contrast-125"
+                className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-1000 ease-out saturate-150 contrast-125"
               />
               <div className="absolute bottom-10 left-10 z-20">
                 <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 inline-flex items-center gap-3">
@@ -357,25 +357,6 @@ const AboutSection = () => {
                 </div>
               </div>
             </div>
-            
-            {/* Floating stat card */}
-            <motion.div 
-              initial={{ y: 50, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              className="absolute -right-10 top-20 bg-[#111724]/90 backdrop-blur-xl border border-white/10 p-6 rounded-3xl shadow-2xl hidden md:block"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-gradient-to-br from-primary-start to-pink-500 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-inner">
-                  <Scissors size={24} />
-                </div>
-                <div>
-                  <div className="text-white font-black text-2xl">Pixel Perfect</div>
-                  <div className="text-primary-start text-sm font-bold uppercase tracking-widest">Editing</div>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
 
           <motion.div
