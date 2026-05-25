@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, useScroll, useSpring } from 'motion/react';
 import {
-  Mail, Phone, Github, Instagram, Youtube, Twitter, Linkedin, Menu, X, ExternalLink, Code, Download, Send, Globe, Sun, Play, MonitorPlay, Film, PenTool, Layers, Clapperboard, Video, Scissors, Camera, Palette, Wand2, Gamepad2, MapPin
+  Mail, Phone, Github, Instagram, Youtube, Twitter, Linkedin, Menu, X, ExternalLink, Code, Download, Send, Globe, Sun, Play, MonitorPlay, Film, PenTool, Layers, Clapperboard, Video, Scissors, Camera, Palette, Wand2, Gamepad2, MapPin, Eye
 } from 'lucide-react';
 import { CursorGlow, Magnetic, SectionWrapper, AnimatedBackground } from './components/Effects';
 
@@ -229,8 +229,14 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="home" className="min-h-screen pt-40 flex flex-col justify-center overflow-hidden">
-      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center flex-1 pb-20">
+    <section id="home" className="min-h-screen pt-40 flex flex-col justify-center overflow-hidden relative">
+      {/* Animated Grid Background */}
+      <div className="absolute inset-0 bg-grid opacity-50 z-0">
+        <div className="w-full h-[calc(100%+40px)] animate-[grid-pan_20s_linear_infinite] bg-grid" style={{ maskImage: 'none', WebkitMaskImage: 'none', backgroundPosition: 'center 0' }} />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#05080f]/50 to-[#05080f] z-0"></div>
+
+      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center flex-1 pb-20 relative z-10">
         <div className="z-10">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
             <SocialLinks />
@@ -240,11 +246,13 @@ const HeroSection = () => {
             variants={containerVars}
             initial="hidden"
             animate="show"
-            className="text-6xl md:text-8xl font-black text-white mb-6 leading-[0.95] tracking-tighter flex flex-wrap gap-x-4"
+            className="text-6xl md:text-8xl lg:text-[7rem] font-black text-white mb-6 leading-[0.85] tracking-tighter flex flex-col uppercase"
+            style={{ textShadow: '0 20px 40px rgba(0,0,0,0.5)' }}
           >
             <motion.span variants={wordVars} className="block">SATISH</motion.span>
-            <motion.span variants={wordVars} className="text-transparent bg-clip-text bg-gradient-to-r from-primary-start via-pink-500 to-purple-500 block">
+            <motion.span variants={wordVars} className="text-transparent bg-clip-text bg-gradient-to-r from-primary-start via-pink-500 to-purple-500 block relative">
               THAKUR
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-start via-pink-500 to-purple-500 opacity-20 blur-2xl -z-10"></div>
             </motion.span>
           </motion.h1>
           
@@ -252,9 +260,9 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="text-gray-400 text-xl mb-12 max-w-lg leading-relaxed font-light"
+            className="text-gray-400 text-xl md:text-2xl mb-12 max-w-lg leading-relaxed font-light backdrop-blur-sm bg-black/10 p-6 rounded-3xl border border-white/5 shadow-2xl"
           >
-            Engineering precision meets cinematic storytelling. Helping gaming and anime channels maximize retention through high-energy edits, flawless sound design, and data-driven thumbnails.
+            Engineering precision meets cinematic storytelling. Maximizing retention through high-energy edits and flawless sound design.
           </motion.p>
           
           <motion.div 
@@ -264,13 +272,14 @@ const HeroSection = () => {
             className="flex flex-wrap items-center gap-6"
           >
             <Magnetic strength={0.2}>
-              <a href="#projects" className="px-10 py-5 bg-primary-start text-bg-dark font-black rounded-full hover:brightness-110 transition-all flex items-center gap-3 shadow-[0_0_30px_rgba(249,115,22,0.4)] uppercase tracking-widest text-sm">
-                <Play size={20} className="fill-bg-dark" />
-                View Projects
+              <a href="#projects" className="px-10 py-5 bg-gradient-to-r from-primary-start to-pink-500 text-bg-dark font-black rounded-2xl hover:brightness-110 hover:shadow-[0_0_40px_rgba(249,115,22,0.4)] transition-all flex items-center gap-3 uppercase tracking-widest text-sm relative group overflow-hidden">
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                <Play size={20} className="fill-bg-dark relative z-10" />
+                <span className="relative z-10">View Projects</span>
               </a>
             </Magnetic>
             <Magnetic strength={0.2}>
-              <a href="#contact" className="px-10 py-5 bg-white/[0.02] backdrop-blur-xl border border-white/10 text-white font-bold rounded-full hover:bg-white/10 transition-all flex items-center gap-2 tracking-widest text-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+              <a href="#contact" className="px-10 py-5 bg-white/[0.02] backdrop-blur-xl border border-white/10 text-white font-bold rounded-2xl hover:bg-white/10 hover:border-white/20 transition-all flex items-center gap-2 tracking-widest text-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                 Let's Collab
               </a>
             </Magnetic>
@@ -304,6 +313,7 @@ const HeroSection = () => {
             transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
             className="w-full max-w-[650px] aspect-square relative z-0"
           >
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary-start/20 to-pink-500/20 rounded-full blur-[100px] -z-10"></div>
             <img 
               src="/hero_avatar_transparent.png" 
               alt="Satish Thakur Avatar" 
@@ -320,60 +330,91 @@ const HeroSection = () => {
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-32 relative overflow-hidden">
-      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="order-2 lg:order-1 relative"
-        >
-           <motion.div 
-             animate={{ y: [-15, 15, -15] }}
-             transition={{ repeat: Infinity, duration: 6, ease: "easeInOut", delay: 1 }}
-             className="w-full max-w-[650px] mx-auto aspect-square relative z-0"
-           >
-            <img 
-              src="/project2.png" 
-              alt="Digital Artist Avatar" 
-              className="w-full h-full object-contain contrast-125 saturate-150 brightness-105" 
-              style={{ filter: 'drop-shadow(0 0 50px rgba(249,115,22,0.4)) drop-shadow(0 0 100px rgba(168,85,247,0.3))' }}
-            />
+    <section id="about" className="py-32 relative bg-[#05080f] overflow-hidden border-y border-white/5">
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-start/5 rounded-full blur-[150px] pointer-events-none -z-10"></div>
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+      
+      <div className="container mx-auto px-6 max-w-7xl relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <div className="absolute -inset-4 bg-gradient-to-br from-primary-start/20 to-pink-500/20 rounded-[3rem] blur-2xl -z-10"></div>
+            <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.8)] relative group">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+              <img 
+                src="/project2.png" 
+                alt="Editing Setup" 
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out saturate-150 contrast-125"
+              />
+              <div className="absolute bottom-10 left-10 z-20">
+                <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 inline-flex items-center gap-3">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-white font-bold tracking-widest uppercase text-sm">Available for Work</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Floating stat card */}
+            <motion.div 
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="absolute -right-10 top-20 bg-[#111724]/90 backdrop-blur-xl border border-white/10 p-6 rounded-3xl shadow-2xl hidden md:block"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-primary-start to-pink-500 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-inner">
+                  <Scissors size={24} />
+                </div>
+                <div>
+                  <div className="text-white font-black text-2xl">Pixel Perfect</div>
+                  <div className="text-primary-start text-sm font-bold uppercase tracking-widest">Editing</div>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="order-1 lg:order-2 z-10"
-        >
-          <h2 className="text-6xl md:text-7xl font-black text-white mb-8 tracking-tighter leading-[0.95]">THE <span className="text-primary-start">ENGINEER'S</span> CUT</h2>
-          <p className="text-gray-400 mb-10 leading-relaxed font-light text-xl">
-            I am a final-year Mechanical Engineering student at Golaghat Engineering College (Assam, India) with a deep passion for visual storytelling. I apply an engineering mindset—precision, adaptability, and an ability to learn fast—to video editing. My goal is always to maximize audience engagement and retention through dynamic pacing and sound synchronization.
-          </p>
-
-          <div className="grid grid-cols-3 gap-8 mb-12 text-center lg:text-left">
-            <div>
-              <h3 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-start to-pink-500 mb-2">150+</h3>
-              <p className="text-sm text-gray-500 uppercase tracking-widest font-bold">Videos Edited</p>
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-6xl md:text-7xl font-black text-white mb-8 tracking-tighter leading-[0.95]">THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-start to-pink-500">ENGINEER'S</span> CUT</h2>
+            
+            <div className="space-y-6 text-xl text-gray-400 font-light leading-relaxed mb-12 relative">
+              <span className="absolute -left-10 top-0 text-9xl text-white/5 font-black font-display pointer-events-none">"</span>
+              <p>
+                I am <span className="text-white font-bold">Satish Thakur</span>, a final-year Mechanical Engineering student at Golaghat Engineering College with a deep passion for visual storytelling. I apply an engineering mindset—precision, adaptability, and an ability to learn fast—to video editing.
+              </p>
+              <p>
+                Specializing in YouTube content for the gaming and anime niches, I engineer edits that hook viewers from the first frame. My process marries technical precision in Premiere Pro with creative flair in After Effects.
+              </p>
             </div>
-            <div>
-              <h3 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-start to-pink-500 mb-2">3+</h3>
-              <p className="text-sm text-gray-500 uppercase tracking-widest font-bold">Years Exp.</p>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-10">
+              {[
+                { label: 'Subscribers', value: '10K+', icon: <Eye size={24} /> },
+                { label: 'Years Exp', value: '3+', icon: <Film size={24} /> },
+                { label: 'Videos Edited', value: '150+', icon: <MonitorPlay size={24} /> },
+              ].map((stat, i) => (
+                <div key={i} className="bg-[#0a0f18] border border-white/5 p-6 rounded-[2rem] hover:border-primary-start/30 transition-colors group">
+                  <div className="text-primary-start mb-4 group-hover:scale-110 transition-transform origin-left">{stat.icon}</div>
+                  <div className="text-4xl font-black text-white mb-1 tracking-tight">{stat.value}</div>
+                  <div className="text-xs text-gray-500 uppercase tracking-widest font-bold">{stat.label}</div>
+                </div>
+              ))}
             </div>
-            <div>
-              <h3 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-start to-pink-500 mb-2">10K+</h3>
-              <p className="text-sm text-gray-500 uppercase tracking-widest font-bold">Subscribers</p>
-            </div>
-          </div>
-
-          <a href="#experience" className="px-10 py-5 border border-primary-start/50 bg-primary-start/10 text-primary-start font-black rounded-full hover:bg-primary-start hover:text-bg-dark transition-all uppercase tracking-widest text-sm shadow-[0_0_30px_rgba(249,115,22,0.15)] inline-block">
-            View My Experience
-          </a>
-        </motion.div>
+            
+            <a href="#experience" className="px-10 py-5 bg-gradient-to-r from-primary-start to-pink-500 text-bg-dark font-black rounded-2xl hover:brightness-110 transition-all uppercase tracking-widest text-sm shadow-[0_0_30px_rgba(249,115,22,0.3)] inline-flex items-center gap-2 group">
+              View My Experience
+              <Play size={18} className="fill-current group-hover:translate-x-1 transition-transform" />
+            </a>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
