@@ -385,6 +385,7 @@ const ExperienceSection = () => {
       role: 'Content Creator & Video Editor',
       company: 'Volt Edits (YouTube)',
       date: '2023 - Present',
+      color: 'from-primary-start to-pink-500',
       points: [
         'Produced cinematic edits, anime edits, and short-form content for a dedicated YouTube audience.',
         'Focused on dynamic pacing, smooth transitions, and visual storytelling to maximize audience engagement and retention.',
@@ -395,6 +396,7 @@ const ExperienceSection = () => {
       role: 'Gaming Content Editor',
       company: 'VOLT444 (YouTube)',
       date: '2023 - Present',
+      color: 'from-cyan-400 to-blue-600',
       points: [
         'Edited gameplay videos, short reels, and social media content tailored to gaming audiences.',
         'Designed engaging thumbnails using Adobe Photoshop to increase click-through rates and channel discoverability.',
@@ -404,9 +406,10 @@ const ExperienceSection = () => {
   ];
 
   return (
-    <section id="experience" className="py-32 relative bg-black/40">
-      <div className="container mx-auto px-6 max-w-5xl">
-        <div className="text-center mb-20">
+    <section id="experience" className="py-32 relative bg-black/40 overflow-hidden">
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-pink-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="container mx-auto px-6 max-w-5xl relative z-10">
+        <div className="text-center mb-24">
           <h2 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tighter">PROFESSIONAL <span className="text-primary-start">EXPERIENCE</span></h2>
           <p className="text-gray-400 font-light text-xl">My ongoing journey as a creator and editor.</p>
         </div>
@@ -419,25 +422,28 @@ const ExperienceSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2 }}
-              className="bg-white/[0.02] backdrop-blur-xl border border-white/5 rounded-3xl p-8 md:p-12 shadow-[0_30px_60px_rgba(0,0,0,0.6)] hover:border-primary-start/30 transition-colors"
+              className="group relative"
             >
-              <div className="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-4">
-                <div>
-                  <h3 className="text-2xl font-black text-white">{exp.role}</h3>
-                  <p className="text-primary-start font-bold uppercase tracking-wider text-sm mt-1">{exp.company}</p>
+              <div className={`absolute -inset-0.5 bg-gradient-to-r ${exp.color} rounded-[2rem] opacity-0 group-hover:opacity-100 blur-md transition-all duration-700`}></div>
+              <div className="relative bg-[#0a0f18]/80 backdrop-blur-2xl border border-white/10 rounded-[2rem] p-8 md:p-12 shadow-[0_30px_60px_rgba(0,0,0,0.6)] hover:bg-[#111724] transition-colors duration-500">
+                <div className="flex flex-col md:flex-row justify-between md:items-center mb-8 gap-4">
+                  <div>
+                    <h3 className="text-3xl font-black text-white tracking-tight">{exp.role}</h3>
+                    <p className={`text-transparent bg-clip-text bg-gradient-to-r ${exp.color} font-black uppercase tracking-widest text-sm mt-2`}>{exp.company}</p>
+                  </div>
+                  <div className="px-6 py-2.5 bg-white/5 border border-white/10 rounded-full text-gray-300 font-bold tracking-widest text-xs whitespace-nowrap shadow-inner">
+                    {exp.date}
+                  </div>
                 </div>
-                <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-gray-300 font-medium text-sm whitespace-nowrap">
-                  {exp.date}
-                </div>
+                <ul className="space-y-5">
+                  {exp.points.map((point, idx) => (
+                    <li key={idx} className="flex gap-4 text-gray-400 font-light leading-relaxed text-lg">
+                      <span className={`text-transparent bg-clip-text bg-gradient-to-br ${exp.color} font-bold mt-1`}>✦</span>
+                      {point}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-4">
-                {exp.points.map((point, idx) => (
-                  <li key={idx} className="flex gap-4 text-gray-400 font-light leading-relaxed">
-                    <span className="text-primary-start mt-1.5">•</span>
-                    {point}
-                  </li>
-                ))}
-              </ul>
             </motion.div>
           ))}
         </div>
@@ -520,13 +526,14 @@ const FeaturedWorkSection = () => {
   ];
 
   return (
-    <section id="work" className="py-32 relative">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-20">
+    <section id="work" className="py-32 relative overflow-hidden">
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-primary-start/5 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center mb-24">
           <h2 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tighter">FEATURED <span className="text-primary-start">WORK</span></h2>
           <p className="text-gray-400 font-light text-xl max-w-2xl mx-auto">Watch my best edits directly. No redirects, just pure cinematic pacing and flawless sound design.</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
           {videos.map((vid, i) => (
             <motion.div 
               key={i}
@@ -534,22 +541,25 @@ const FeaturedWorkSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2 }}
-              className="bg-black/50 border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+              className="group relative"
             >
-              <div className="aspect-video relative bg-black">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`https://www.youtube.com/embed/${vid.id}?modestbranding=1&rel=0`}
-                  title={vid.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full"
-                ></iframe>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-white">{vid.title}</h3>
+              <div className="absolute -inset-0.5 bg-gradient-to-br from-primary-start to-pink-500 rounded-[2rem] opacity-0 group-hover:opacity-100 blur-md transition-all duration-500"></div>
+              <div className="relative bg-[#0a0f18] border border-white/10 rounded-[2rem] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
+                <div className="aspect-video relative bg-black group-hover:scale-[1.02] transition-transform duration-500">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={`https://www.youtube.com/embed/${vid.id}?modestbranding=1&rel=0`}
+                    title={vid.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full"
+                  ></iframe>
+                </div>
+                <div className="p-8 bg-gradient-to-t from-[#0a0f18] to-transparent">
+                  <h3 className="text-2xl font-black text-white group-hover:text-primary-start transition-colors tracking-tight">{vid.title}</h3>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -570,13 +580,13 @@ const ThumbnailGallerySection = () => {
   ];
 
   return (
-    <section id="thumbnails" className="py-32 relative bg-black/20 border-y border-white/5">
+    <section id="thumbnails" className="py-32 relative bg-[#05080f] border-y border-white/5">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-20">
+        <div className="text-center mb-24">
           <h2 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tighter">HIGH-CTR <span className="text-primary-start">THUMBNAILS</span></h2>
           <p className="text-gray-400 font-light text-xl max-w-2xl mx-auto">Custom designs engineered in Photoshop to drastically increase click-through rates.</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {thumbnails.map((thumb, i) => (
             <motion.div
               key={i}
@@ -584,9 +594,17 @@ const ThumbnailGallerySection = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="aspect-video rounded-2xl overflow-hidden border border-white/10 group cursor-pointer shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:shadow-[0_20px_60px_rgba(249,115,22,0.2)] hover:border-primary-start/40 transition-all"
+              className="group relative"
             >
-              <img src={thumb} alt={`Thumbnail ${i+1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100" />
+              <div className="absolute -inset-0.5 bg-gradient-to-br from-primary-start to-pink-500 rounded-3xl opacity-0 group-hover:opacity-100 blur-md transition-all duration-500"></div>
+              <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 cursor-pointer shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
+                <img src={thumb} alt={`Thumbnail ${i+1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100 saturate-150" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                  <div className="w-10 h-10 rounded-full bg-primary-start/20 backdrop-blur-md flex items-center justify-center text-white ml-auto border border-primary-start/50">
+                    <ExternalLink size={18} />
+                  </div>
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -597,46 +615,50 @@ const ThumbnailGallerySection = () => {
 
 const ChannelsSection = () => {
   return (
-    <section id="channels" className="py-32 relative bg-black/40">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-20">
+    <section id="channels" className="py-32 relative bg-[#0a0f18] overflow-hidden">
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[800px] h-[800px] bg-primary-start/5 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center mb-24">
           <h2 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tighter">FEATURED <span className="text-primary-start">CHANNELS</span></h2>
           <p className="text-gray-400 font-light text-xl">The platforms where I actively produce and edit content.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16 max-w-7xl mx-auto">
           {PROJECTS.map((project, i) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.02, y: -5 }}
+              whileHover={{ y: -10 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, type: "spring", stiffness: 300, damping: 20 }}
-              className="bg-white/[0.02] backdrop-blur-xl border border-white/5 rounded-3xl overflow-hidden group hover:border-primary-start/30 transition-colors flex flex-col shadow-[0_30px_60px_rgba(0,0,0,0.6)] hover:shadow-[0_40px_80px_rgba(249,115,22,0.1)] cursor-pointer"
+              className="group relative cursor-pointer"
               onClick={() => window.open(project.link, '_blank')}
             >
-              <div className="aspect-[4/3] overflow-hidden relative bg-black">
-                <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-70 group-hover:opacity-100 contrast-110 saturate-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f18] via-transparent to-transparent opacity-90" />
-                <div className="absolute bottom-6 left-6 flex flex-wrap gap-2 pr-6">
-                  {project.tags.map((tag, idx) => (
-                    <span key={idx} className="text-[11px] uppercase tracking-wider font-bold px-4 py-1.5 bg-black/60 backdrop-blur-md rounded-full text-white border border-white/10 shadow-lg">
-                      {tag}
-                    </span>
-                  ))}
+              <div className="absolute -inset-0.5 bg-gradient-to-br from-primary-start to-pink-500 rounded-[2.5rem] opacity-0 group-hover:opacity-100 blur-md transition-all duration-500"></div>
+              <div className="relative bg-[#111724]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col shadow-[0_30px_60px_rgba(0,0,0,0.6)] h-full transition-colors duration-500">
+                <div className="aspect-[4/3] overflow-hidden relative bg-black">
+                  <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-70 group-hover:opacity-100 contrast-110 saturate-110" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#111724] via-transparent to-transparent opacity-100" />
+                  <div className="absolute bottom-6 left-6 flex flex-wrap gap-2 pr-6">
+                    {project.tags.map((tag, idx) => (
+                      <span key={idx} className="text-[10px] uppercase tracking-widest font-black px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-white border border-white/20 shadow-lg group-hover:bg-primary-start group-hover:text-bg-dark transition-colors">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="p-8 flex-1 flex flex-col relative z-10 bg-gradient-to-b from-[#0a0f18] to-transparent">
-                <h3 className="text-3xl font-black text-white mb-4 tracking-tight">{project.title}</h3>
-                <p className="text-base text-gray-400 mb-10 flex-1 font-light leading-relaxed">{project.description}</p>
-                <div className="flex gap-4">
-                  <button className="flex-1 py-4 text-center text-sm font-black bg-primary-start text-bg-dark rounded-xl hover:brightness-110 transition-colors flex items-center justify-center gap-2 uppercase tracking-widest shadow-[0_0_20px_rgba(249,115,22,0.2)]">
-                    <Play size={18} className="fill-bg-dark" /> View Channel
-                  </button>
-                  <button className="w-14 h-14 flex items-center justify-center border border-white/10 bg-white/[0.02] rounded-xl text-white hover:border-white/30 transition-colors">
-                    <ExternalLink size={20} />
-                  </button>
+                <div className="p-10 flex-1 flex flex-col relative z-10 bg-[#111724]">
+                  <h3 className="text-3xl font-black text-white mb-4 tracking-tight group-hover:text-primary-start transition-colors">{project.title}</h3>
+                  <p className="text-lg text-gray-400 mb-10 flex-1 font-light leading-relaxed">{project.description}</p>
+                  <div className="flex gap-4">
+                    <button className="flex-1 py-5 text-center text-sm font-black bg-white/5 border border-white/10 text-white rounded-2xl group-hover:bg-primary-start group-hover:text-bg-dark group-hover:border-primary-start transition-all duration-500 flex items-center justify-center gap-3 uppercase tracking-widest">
+                      <Play size={18} className="fill-current" /> View Channel
+                    </button>
+                    <button className="w-[60px] h-[60px] flex items-center justify-center border border-white/10 bg-white/5 rounded-2xl text-white group-hover:border-primary-start group-hover:text-primary-start transition-all duration-500">
+                      <ExternalLink size={20} />
+                    </button>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -666,8 +688,9 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-32 relative">
-      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+    <section id="contact" className="py-32 relative overflow-hidden">
+      <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] bg-pink-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -679,11 +702,12 @@ const ContactSection = () => {
             transition={{ repeat: Infinity, duration: 5.5, ease: "easeInOut", delay: 0.5 }}
             className="w-full max-w-[550px] aspect-square relative"
           >
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary-start/20 to-pink-500/20 rounded-full blur-[80px]"></div>
             <img 
               src="/project3.png" 
               alt="Contact Avatar" 
-              className="w-full h-full object-contain contrast-125 saturate-150 brightness-105" 
-              style={{ filter: 'drop-shadow(0 0 50px rgba(249,115,22,0.4)) drop-shadow(0 0 80px rgba(249,115,22,0.2))' }}
+              className="w-full h-full object-contain contrast-125 saturate-150 brightness-105 relative z-10" 
+              style={{ filter: 'drop-shadow(0 0 50px rgba(249,115,22,0.4))' }}
             />
           </motion.div>
         </motion.div>
@@ -698,31 +722,32 @@ const ContactSection = () => {
             <h2 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-[0.95]">LET'S <span className="text-primary-start">ROLL</span></h2>
             <p className="text-gray-400 text-xl font-light mb-8">Ready to start your next visual project? Drop a message.</p>
             
-            <div className="flex flex-col gap-4 text-gray-300 font-medium">
-              <a href="mailto:satishthakur7576@gmail.com" className="flex items-center gap-3 hover:text-primary-start transition-colors">
-                <Mail className="text-primary-start" size={20} /> satishthakur7576@gmail.com
+            <div className="flex flex-col gap-5 text-gray-300 font-medium text-lg">
+              <a href="mailto:satishthakur7576@gmail.com" className="flex items-center gap-4 hover:text-primary-start transition-colors group">
+                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-primary-start/10 group-hover:border-primary-start/30 transition-all"><Mail className="text-primary-start" size={20} /></div> satishthakur7576@gmail.com
               </a>
-              <a href="tel:+919954072642" className="flex items-center gap-3 hover:text-primary-start transition-colors">
-                <Phone className="text-primary-start" size={20} /> +91-9954072642
+              <a href="tel:+919954072642" className="flex items-center gap-4 hover:text-primary-start transition-colors group">
+                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-primary-start/10 group-hover:border-primary-start/30 transition-all"><Phone className="text-primary-start" size={20} /></div> +91-9954072642
               </a>
-              <div className="flex items-center gap-3">
-                <MapPin className="text-primary-start" size={20} /> Assam, India
+              <div className="flex items-center gap-4 group cursor-default">
+                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-primary-start/10 group-hover:border-primary-start/30 transition-all"><MapPin className="text-primary-start" size={20} /></div> Assam, India
               </div>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6 bg-white/[0.02] backdrop-blur-xl border border-white/5 p-8 md:p-10 rounded-3xl shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <input required name="firstName" onChange={handleChange} type="text" placeholder="First Name" className="w-full bg-black/40 border border-white/5 rounded-xl px-6 py-5 text-white focus:outline-none focus:border-primary-start/50 focus:bg-black/60 transition-all placeholder-gray-600 font-light text-lg" />
-              <input required name="lastName" onChange={handleChange} type="text" placeholder="Last Name" className="w-full bg-black/40 border border-white/5 rounded-xl px-6 py-5 text-white focus:outline-none focus:border-primary-start/50 focus:bg-black/60 transition-all placeholder-gray-600 font-light text-lg" />
+          <form onSubmit={handleSubmit} className="space-y-6 bg-[#111724]/80 backdrop-blur-2xl border border-white/10 p-8 md:p-10 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.5)] relative group">
+            <div className="absolute -inset-0.5 bg-gradient-to-br from-primary-start to-pink-500 rounded-[2.5rem] opacity-0 group-hover:opacity-[0.15] blur-md transition-opacity duration-700 pointer-events-none"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+              <input required name="firstName" value={formData.firstName} onChange={handleChange} type="text" placeholder="First Name" className="w-full bg-[#0a0f18] border border-white/10 rounded-2xl px-6 py-5 text-white focus:outline-none focus:border-primary-start focus:ring-1 focus:ring-primary-start transition-all placeholder-gray-600 font-light text-lg" />
+              <input required name="lastName" value={formData.lastName} onChange={handleChange} type="text" placeholder="Last Name" className="w-full bg-[#0a0f18] border border-white/10 rounded-2xl px-6 py-5 text-white focus:outline-none focus:border-primary-start focus:ring-1 focus:ring-primary-start transition-all placeholder-gray-600 font-light text-lg" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <input required name="email" onChange={handleChange} type="email" placeholder="Email Address" className="w-full bg-black/40 border border-white/5 rounded-xl px-6 py-5 text-white focus:outline-none focus:border-primary-start/50 focus:bg-black/60 transition-all placeholder-gray-600 font-light text-lg" />
-              <input name="phone" onChange={handleChange} type="tel" placeholder="Phone Number" className="w-full bg-black/40 border border-white/5 rounded-xl px-6 py-5 text-white focus:outline-none focus:border-primary-start/50 focus:bg-black/60 transition-all placeholder-gray-600 font-light text-lg" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+              <input required name="email" value={formData.email} onChange={handleChange} type="email" placeholder="Email Address" className="w-full bg-[#0a0f18] border border-white/10 rounded-2xl px-6 py-5 text-white focus:outline-none focus:border-primary-start focus:ring-1 focus:ring-primary-start transition-all placeholder-gray-600 font-light text-lg" />
+              <input name="phone" value={formData.phone} onChange={handleChange} type="tel" placeholder="Phone Number" className="w-full bg-[#0a0f18] border border-white/10 rounded-2xl px-6 py-5 text-white focus:outline-none focus:border-primary-start focus:ring-1 focus:ring-primary-start transition-all placeholder-gray-600 font-light text-lg" />
             </div>
-            <textarea required name="message" onChange={handleChange} placeholder="Tell me about your project..." rows={5} className="w-full bg-black/40 border border-white/5 rounded-xl px-6 py-5 text-white focus:outline-none focus:border-primary-start/50 focus:bg-black/60 transition-all resize-none placeholder-gray-600 font-light text-lg"></textarea>
-            <button type="submit" className="w-full py-5 bg-primary-start text-bg-dark font-black rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-3 uppercase tracking-widest text-lg shadow-[0_0_30px_rgba(249,115,22,0.3)]">
-              {status === 'success' ? 'Message Sent!' : <><Send size={22} /> Send Brief</>}
+            <textarea required name="message" value={formData.message} onChange={handleChange} placeholder="Tell me about your project..." rows={5} className="w-full bg-[#0a0f18] border border-white/10 rounded-2xl px-6 py-5 text-white focus:outline-none focus:border-primary-start focus:ring-1 focus:ring-primary-start transition-all resize-none placeholder-gray-600 font-light text-lg relative z-10"></textarea>
+            <button type="submit" className="w-full py-5 bg-gradient-to-r from-primary-start to-pink-500 text-bg-dark font-black rounded-2xl hover:brightness-110 hover:shadow-[0_0_30px_rgba(249,115,22,0.4)] transition-all flex items-center justify-center gap-3 uppercase tracking-widest text-lg relative z-10">
+              {status === 'success' ? 'Message Sent!' : <><Send size={22} className="fill-current" /> Send Brief</>}
             </button>
           </form>
         </motion.div>
